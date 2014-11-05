@@ -50,7 +50,6 @@ y = sin(cos(sin(cos(x)))) + sin(cos(sin(cos(x))))
 Can I say
 
 f(x) := sin(cos(sin(cos(x))))
-
 y = f(x) + f(x)
 
 I would steer you away from providing support for that, at least on the first pass. 
@@ -68,16 +67,11 @@ into if your other options don't pan out for whatever reason.
 With regard to your specific questions: Yes I would want to see 3D graphs supported, but
 my advice would be to worry about that after you have 2D working and polished. 
 
-
 I think one idea for piecewise input could be
 
-
 NInf - 0: 0
-
 0 - 2: x^2
-
 2 - Inf: x
-
 
 Specify a piecewise function that is zero from negative infinity to 0, 
 x^2 from 0 to 2, and x from 2 to infinity. I'd love to hear what you've come up with though! 
