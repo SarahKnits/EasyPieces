@@ -9,7 +9,12 @@ graphs.
 
 ## Language domain
 This language will be in the domain of graphing for math, focusing on the
-needs of freshmen taking Math 30. 
+needs of freshmen taking Math 30. This will hopefully benefit all math students
+who are using LaTeX for their math homework and want a cleaner graph than the
+result of hand-drawing and scanning. There are existing programs such as
+Grapher for Mac that are in this domain, but existing programs fall short 
+either in the intuitiveness of the input or in the ease of producing the 
+desired result.  
 
 ## Language design
 The language will allow users to write in math notation. At present, I intend
@@ -22,15 +27,15 @@ graphing was possible, it was far from ideal. My goal will be to make graphing
 piece-wise functions complete (allowing multiple parts with open or closed dots
 for endpoints) and easy (better matching the notation used in math).
 
+When a program runs, Grapher will produce a graph including piece-wise graphs
+following the specifications fo the user. There are certainly possible errors
+in this language. The input will likely have a tightly defined syntax and I
+will have to determine how best to produce errors for this. The more tightly
+defined the syntax is, the easier I imagine error messages will be.
+
 ## Example computations
 
-This is an example of a program with a window from (-10,-10) to (10,10):
--10 <= x <= 10    
--10 <= y <= 10    
-y = {2x, x=0    
-  = {3x, x>0    
-  = {x^2, otherwise    
-
-The user will define the window in which to display their graph, followed by
-the mathematical notation for the graph. 
+The language will allow specification of the window and the desired pieces of
+the final graph. It will then produce a graph using Grapher that matches these
+requirement, including having the open or closed dots for endpoints. 
 
