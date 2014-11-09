@@ -19,6 +19,7 @@ the proper bounds, but requires a bit of work to get desired bounds.
 
 Additionally, Grapher doesn't automatically have open or closed circles for
 boundaries.
+
 -------------------------------------------------------------------------------
 
 
@@ -40,8 +41,7 @@ y = x <= 2? x + 2 : (x< 4 ? x + 3 : x + 4)
 
 This is a bit harder to follow. It again doesn't define the boundaries.
 
-Additionally, Grapher doesn't automatically have open or closed circles for
-boundaries.
+
 -------------------------------------------------------------------------------
 
 
