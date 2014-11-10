@@ -1,0 +1,23 @@
+.idea/*
+piecewiseGrapher/.idea/*
+
+piecewiseGrapher/*.class
+piececwiseGrapher/*.log
+
+# sbt specific
+piecewiseGrapher/.cache
+piecewiseGrapher/.history
+piecewiseGrapher/.lib/
+piecewiseGrapher/dist/*
+piecewiseGrapher/target/
+piecewiseGrapher/lib_managed/
+piecewiseGrapher/src_managed/
+piecewiseGrapher/project/boot/
+piecewiseGrapher/project/plugins/project/
+
+# Scala-IDE specific
+.scala_dependencies
+.worksheet
+
+
+
