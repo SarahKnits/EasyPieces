@@ -1,0 +1,7 @@
+There seems to be less guidance on how to format our critiques this weekso this one will be a bit more free-form. 
+
+First, I think the stuff you've written so far looks good. To be honest I'm a little bit disturbed by the lack of closing braces in your syntax :). I also thought that it would be nice to fully specify all of the functions for all of the ranges, instead of having an otherwise case like you have - but I totally see the logic of an otherwise option in cases where the function is irregular and crazy. 
+
+It seems like from here it should be fairly straight forward to do piceweise functions in 2d? You could take this project in a couple directions. You could try to make this really easy for a student to actually use, or you could try to move on to more complicated functions. I think Prof. Ben might want you to go for the second option and delve further into the language itself, but I don't wouldn't want to put words in his mouth. I think that both options are fine as long as you're intentional about the choice. 
+
+Finally, I would reccomend you go with grapher instead of GNUPlot - at least with the limited information I have. I'm not sure what exactly you mean when you say you won't be able to format the input the way you want. Do you mean you'll have to output text, and then have grapher read that in? It seems like a BASH script could run the parser, then call grapher on the text output with one call (although I'm no expert). 
