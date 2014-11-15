@@ -22,10 +22,12 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | variable~"<"~number ^^ {case v~"<"~n => PGBounds(v,"<", n)}
       | variable~">="~number ^^ {case v~">="~n => PGBounds(v,">=", n)}
       | variable~">"~number ^^ {case v~">"~n => PGBounds(v,">", n)}
+      | variable~"="~number ^^ {case v~"="~n => PGBounds(v,"=", n)}
       | number~"<="~variable ^^ {case n~"<="~v => PGBounds(v,">=", n)}
       | number~"<"~variable ^^ {case n~"<"~v => PGBounds(v,">", n)}
       | number~">="~variable ^^ {case n~">="~v => PGBounds(v,"<=", n)}
-      | number~">"~variable ^^ {case n~">"~v => PGBounds(v,"<", n)})
+      | number~">"~variable ^^ {case n~">"~v => PGBounds(v,"<", n)}
+      | number~"="~variable ^^ {case n~"="~v => PGBounds(v,"=", n)})
 
   lazy val number: PackratParser[Function] =
     """[0-9]\w*""".r ^^ {case x => PGNumber(x.toInt)}

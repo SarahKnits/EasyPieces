@@ -21,6 +21,11 @@ class ParserTest extends FunSpec with LangParseMatchers[AST] {
         PGFunction(PGBounds(PGVariable("x"), ">=", PGNumber(2)), PGFunctionName("f"), PGVariable("x"), PGExpression(PGNumber(2), "-", PGVariable("x"))))
     }
 
+    it("can parse exponents") {
+      program("g(y) = { y<4, y^3") should parseAs(
+        PGFunction(PGBounds(PGVariable("y"), "<", PGNumber(4)), PGFunctionName("f"), PGVariable("y"), PGExpression(PGVariable("y"), "^", PGNumber(2))))
+    }
+
     it("can handle complicated equations") {
       program("f(x) = { x = 0, 2*3+x") should parseAs(
         PGFunction(PGBounds(PGVariable("x"), "=", PGNumber(0)), PGFunctionName("f"), PGVariable("x"), PGExpression(PGExpression(PGNumber(2), "*", PGNumber(3)), "+", PGVariable("x"))))

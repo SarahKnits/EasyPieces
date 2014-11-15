@@ -9,3 +9,13 @@ libraryDependencies ++=
     "org.scalatest" % "scalatest_2.11" % "2.1.7",
     "org.scala-lang" % "scala-compiler" % scalaVersion.value,
     "org.scalafx" % "scalafx_2.11" % "8.0.5-R5")
+
+libraryDependencies  ++= Seq(
+  "org.scalanlp" %% "breeze" % "0.10",
+  "org.scalanlp" %% "breeze-natives" % "0.10",
+  "org.sameersingh.scalaplot" % "scalaplot" % "0.0.3"
+)
+
+resolvers ++= Seq(
+  "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/"
+)

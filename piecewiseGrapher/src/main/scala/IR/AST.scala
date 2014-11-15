@@ -17,6 +17,7 @@ package IR
 sealed abstract class AST
 sealed abstract class Function extends AST
 
+case class PGBoundsVarAndExpression(bounds:Function, variable:Function, expression:Function) extends Function
 case class PGFunction(bounds: Function, funcName: Function, variable: Function, expression: Function) extends Function
 case class PGVariable(string:String) extends Function
 case class PGExpression(left:Function, operator:String, right:Function) extends Function
