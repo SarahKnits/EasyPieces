@@ -9,7 +9,7 @@ object Parser extends JavaTokenParsers with PackratParsers {
   def apply(s: String): ParseResult[AST] = parseAll(function, s)
 
   lazy val function: PackratParser[Function] =
-    functionName~"("~variable~")"~"="~"{"~bounds~","~expression ^^ {case fn~"("~v~")"~"="~"{"~b~","~e => PGFunction(b,fn,v,e)}
+    functionName~"("~variable~")"~"="~"{"~expression~","~bounds ^^ {case fn~"("~v~")"~"="~"{"~e~","~b => PGFunction(b,fn,v,e)}
 
   lazy val functionName: PackratParser[Function] =
     """[A-Za-z_]\w*""".r ^^ {case x => PGFunctionName(x)}

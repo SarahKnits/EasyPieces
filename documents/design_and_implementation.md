@@ -89,3 +89,9 @@ f(x) = {x^2, otherwise
 
 ### An overview of the architecture of your system.
 
+My system follows a very similar structure to the structure we used in the 
+external PicoBot project. The program is read in and parsed into an AST tree.
+It is then processed and made into a list of functions and equations. Next,
+this list is processed to create a list of data points. Finally, this list of
+data points is graphed and the output is created. 
+
