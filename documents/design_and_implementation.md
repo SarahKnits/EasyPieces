@@ -33,7 +33,10 @@ There are no control structures in my DSL.
 A program requires a text input of a list of functions. The program is also able
 to take in the desired window size, point interval, and which format the output
 should be given in. The output can be a PNG file, PDF, ASCII art, or a pop-up
-GUI allowing the user to change the aspect ratio before saving. 
+GUI allowing the user to change the aspect ratio before saving. Following is an
+example output corresponding to program 2 in sampleInput.md.
+
+![Program 2 Graph](https://github.com/SarahKnits/project/blob/November16/piecewiseGrapher/docs/img/SecondProgram.png)
 
 ### Error handling: How can programs go wrong, and how does your language communicate those errors to the user?
 
