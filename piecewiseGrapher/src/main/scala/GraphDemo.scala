@@ -30,8 +30,8 @@ object GraphDemo {
 
     val y6 = x5.map(i => i+4.0)
 
-
-    output(PNG("docs/img/", "SecondProgram"), plot(List(x1 -> Y(y1, pt = Some(PointType.Dot), color = graphColor),
+    output(PNG("docs/img/", "SecondProgram"), plot(List(
+      x1 -> Y(y1, pt = Some(PointType.Dot), color = graphColor),
       x2 -> Y(y2, pt = Some(PointType.Dot), color = graphColor),
       x3 -> Y(y3, pt = Some(PointType.Dot), color = graphColor),
       x4 -> Y(y4, pt = Some(PointType.fullO), ps = Some(2.0), color = graphColor),
