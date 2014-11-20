@@ -19,5 +19,9 @@ piecewiseGrapher/project/plugins/project/
 .scala_dependencies
 .worksheet
 
+# My Project
+piecewiseGrapher/docs/img/*.dat
+piecewiseGrapher/docs/img/*.gpl
+
 
 

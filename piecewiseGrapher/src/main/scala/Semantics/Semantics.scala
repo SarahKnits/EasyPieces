@@ -11,16 +11,14 @@ package object Semantics {
   var mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
   val step = 0.01
   val graphColor = Some(Color.Black)
-  val title = "Second Program"
-  val fileName = "SecondProgram"
-  val location = "docs/img"
-  var plotList: XYData
+  val title = "My Graph"
+  val fileName = "Graph"
+  val location = "docs/img/"
+  var plotList: XYData = new XYData()
 
 
   def eval(ast: AST): scala.collection.mutable.Map[String, List[Function]] = ast match {
-    // Consumes commands until it reaches "null", which terminates the evaluation
     case PGFunction(bounds, funcName, variable, expression, next) =>
-      // Build rule from parts of the command
       val function: Function = PGBoundsVarAndExpression(bounds, variable, expression)
       val currFunctions: Option[List[Function]] = mapFunctions.get(extractString(funcName))
       currFunctions match {
@@ -48,12 +46,13 @@ package object Semantics {
 
   def evalExpression(expression:Function, input:Double) : Double = {
     expression match {
+      case PGParens(e) => evalExpression(e, input)
       case PGExpression(left, "+", right) => evalExpression(left, input) + evalExpression(right, input)
       case PGExpression(left, "-", right) => evalExpression(left, input) - evalExpression(right, input)
-      case PGExpression(left, "*", right) => evalExpression(left, input) - evalExpression(right, input)
+      case PGExpression(left, "*", right) => evalExpression(left, input) * evalExpression(right, input)
       case PGExpression(left, "/", right) => evalExpression(left, input) / evalExpression(right, input)
       case PGExpression(left, "^", right) => pow(evalExpression(left, input), evalExpression(right, input))
-      case PGNumber(i:Integer) => i*1.0
+      case PGNumber(i:Integer) => i * 1.0
       case PGVariable(j:String) => input
       case _ => -1.0
     }
@@ -65,12 +64,21 @@ package object Semantics {
       case Some(x) => x.foreach(f =>
       f match {
         case PGBoundsVarAndExpression(PGBounds(less, comp1, variable, comp2, more), variable2, expression) =>
-          val x: Seq[Double] = extractNumber(less) * 1.0 until extractNumber(more) * 1.0 by step
-          plotList += (x -> Y(x.map(i => evalExpression(expression, i))))
+          var x: Seq[Double] = extractNumber(less) * 1.0 until extractNumber(more) * 1.0 by step
+          plotList += (x -> Y(x.map(i => evalExpression(expression, i)), pt = PointType.Dot, color = graphColor))
           if (extractString(comp1) == "<=") {
-            // plotList += filled point at first bound
+            x = extractNumber(less) * 1.0 until (extractNumber(less) + 1) * 1.0 by 1.0
+            plotList += (x -> Y(x.map(i=> evalExpression(expression, i)), pt=PointType.fullO, ps= Some(2.0), color = graphColor))
           } else {
-            // plotList += empty point at first bound
+            x = extractNumber(less) * 1.0 until (extractNumber(less) + 1) * 1.0 by 1.0
+            plotList += (x -> Y(x.map(i=> evalExpression(expression, i)), pt=PointType.emptyO, ps= Some(2.0), color = graphColor))
+          }
+          if (extractString(comp2) == "<=") {
+            x = extractNumber(more) * 1.0 until (extractNumber(more) + 1) * 1.0 by 1.0
+            plotList += (x -> Y(x.map(i=> evalExpression(expression, i)), pt=PointType.fullO, ps= Some(2.0), color = graphColor))
+          } else {
+            x = extractNumber(more) * 1.0 until (extractNumber(more) + 1) * 1.0 by 1.0
+            plotList += (x -> Y(x.map(i=> evalExpression(expression, i)), pt=PointType.emptyO, ps= Some(2.0), color = graphColor))
           }
         case _ => return
       })
@@ -80,6 +88,8 @@ package object Semantics {
   def graph(functionMap: scala.collection.mutable.Map[String, List[Function]]): Unit = {
     (functionMap.keySet).foreach(i => addToPlotList(mapFunctions.get(i)))
     output(PNG(location, fileName), plot(plotList,
-      x = Axis(label = "x"), y = Axis(label = "f(x)"), title = "Second Program"))
+      x = Axis(label = "x"), y = Axis(label = "f(x)"), title = title))
+    mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
+    plotList = new XYData()
   }
 }
