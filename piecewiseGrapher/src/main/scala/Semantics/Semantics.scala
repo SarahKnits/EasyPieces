@@ -10,11 +10,14 @@ package object Semantics {
   // Maps a street to a state number
   var mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
   val step = 0.01
-  val graphColor = Some(Color.Black)
+  var colorIndex = 0
   val title = "My Graph"
   val fileName = "Graph"
   val location = "docs/img/"
   var plotList: XYData = new XYData()
+
+  var colorMap = Map((0, Some(Color.Black)), (1, Some(Color.Blue)), (2, Some(Color.Red)), (3, Some(Color.Yellow)),
+    (4, Some(Color.Green)))
 
 
   def eval(ast: AST): scala.collection.mutable.Map[String, List[Function]] = ast match {
@@ -59,6 +62,8 @@ package object Semantics {
   }
 
   def addToPlotList(funcList: Option[List[Function]]): Unit = {
+    val graphColor:Option[Color.Type] = colorMap.getOrElse(colorIndex % 5, Color.Black)
+    colorIndex += 1
     funcList match {
       case None => return
       case Some(x) => x.foreach(f =>
@@ -88,7 +93,7 @@ package object Semantics {
   def graph(functionMap: scala.collection.mutable.Map[String, List[Function]]): Unit = {
     (functionMap.keySet).foreach(i => addToPlotList(mapFunctions.get(i)))
     output(PNG(location, fileName), plot(plotList,
-      x = Axis(label = "x"), y = Axis(label = "f(x)"), title = title))
+      x = Axis(label = "x"), y = Axis(label = "y"), title = title))
     mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
     plotList = new XYData()
   }
