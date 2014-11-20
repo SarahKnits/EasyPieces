@@ -34,7 +34,7 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | expression~"-"~expression ^^ {case e~"-"~e2 => PGExpression(e, "-", e2)}
       | expression~"*"~expression ^^ {case e~"*"~e2 => PGExpression(e, "*", e2)}
       | expression~"/"~expression ^^ {case e~"/"~e2 => PGExpression(e, "/", e2)}
-      | expression~"^"~number ^^ {case e~"^"~n => PGExpression(e, "^", n)}
+      | expression~"^"~expression ^^ {case e~"^"~n => PGExpression(e, "^", n)}
       | "("~expression~")" ^^ {case "("~e~")" => PGParens(e)}
       | number ^^ {case PGNumber(n) => PGNumber(n)}
       | variable ^^ {case PGVariable(v) => PGVariable(v)})

@@ -17,7 +17,7 @@ package object Semantics {
   var plotList: XYData = new XYData()
 
   var colorMap = Map((0, Some(Color.Black)), (1, Some(Color.Blue)), (2, Some(Color.Red)), (3, Some(Color.Yellow)),
-    (4, Some(Color.Green)))
+    (4, Some(Color.Green)), (5, Some(Color.Purple)), (6, Some(Color.Gold)))
 
 
   def eval(ast: AST): scala.collection.mutable.Map[String, List[Function]] = ast match {
@@ -62,7 +62,7 @@ package object Semantics {
   }
 
   def addToPlotList(funcList: Option[List[Function]]): Unit = {
-    val graphColor:Option[Color.Type] = colorMap.getOrElse(colorIndex % 5, Color.Black)
+    val graphColor:Option[Color.Type] = colorMap.getOrElse(colorIndex % 7, Color.Black)
     colorIndex += 1
     funcList match {
       case None => return
@@ -70,7 +70,7 @@ package object Semantics {
       f match {
         case PGBoundsVarAndExpression(PGBounds(less, comp1, variable, comp2, more), variable2, expression) =>
           var x: Seq[Double] = extractNumber(less) * 1.0 until extractNumber(more) * 1.0 by step
-          plotList += (x -> Y(x.map(i => evalExpression(expression, i)), pt = PointType.Dot, color = graphColor))
+          plotList += (x -> Y(x.map(i => evalExpression(expression, i)), ps= Some(0.5), pt = PointType.Dot, color = graphColor))
           if (extractString(comp1) == "<=") {
             x = extractNumber(less) * 1.0 until (extractNumber(less) + 1) * 1.0 by 1.0
             plotList += (x -> Y(x.map(i=> evalExpression(expression, i)), pt=PointType.fullO, ps= Some(2.0), color = graphColor))
@@ -96,5 +96,6 @@ package object Semantics {
       x = Axis(label = "x"), y = Axis(label = "y"), title = title))
     mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
     plotList = new XYData()
+    colorIndex = 0
   }
 }
