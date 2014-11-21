@@ -16,7 +16,7 @@ package object Semantics {
   val location = "docs/img/"
   var plotList: XYData = new XYData()
 
-  var colorMap = Map((0, Some(Color.Black)), (1, Some(Color.Blue)), (2, Some(Color.Red)), (3, Some(Color.Yellow)),
+  var colorMap = Map((0, Some(Color.Black)), (1, Some(Color.Blue)), (2, Some(Color.Red)), (3, Some(Color.Magenta)),
     (4, Some(Color.Green)), (5, Some(Color.Purple)), (6, Some(Color.Gold)))
 
 
@@ -42,9 +42,9 @@ package object Semantics {
     case _ => "Invalid"
   }
 
-  def extractNumber(number:Function): Integer = number match {
+  def extractNumber(number:Function): Double = number match {
     case PGNumber(x) => x
-    case _ => -1
+    case _ => -1.0
   }
 
   def evalExpression(expression:Function, input:Double) : Double = {
@@ -55,7 +55,12 @@ package object Semantics {
       case PGExpression(left, "*", right) => evalExpression(left, input) * evalExpression(right, input)
       case PGExpression(left, "/", right) => evalExpression(left, input) / evalExpression(right, input)
       case PGExpression(left, "^", right) => pow(evalExpression(left, input), evalExpression(right, input))
-      case PGNumber(i:Integer) => i * 1.0
+      case PGSingleApply("sqrt", left) => pow(evalExpression(left, input), 0.5)
+      case PGSingleApply("abs", left) => Math.abs(evalExpression(left, input))
+      case PGSingleApply("sin", left) => Math.sin(evalExpression(left, input))
+      case PGSingleApply("cos", left) => Math.cos(evalExpression(left, input))
+      case PGSingleApply("e", left) => Math.exp(evalExpression(left, input))
+      case PGNumber(i:Double) => i * 1.0
       case PGVariable(j:String) => input
       case _ => -1.0
     }
@@ -69,20 +74,20 @@ package object Semantics {
       case Some(x) => x.foreach(f =>
       f match {
         case PGBoundsVarAndExpression(PGBounds(less, comp1, variable, comp2, more), variable2, expression) =>
-          var x: Seq[Double] = extractNumber(less) * 1.0 until extractNumber(more) * 1.0 by step
+          var x: Seq[Double] = evalExpression(less, 0) * 1.0 until evalExpression(more, 0) * 1.0 by step
           plotList += (x -> Y(x.map(i => evalExpression(expression, i)), ps= Some(0.5), pt = PointType.Dot, color = graphColor))
           if (extractString(comp1) == "<=") {
-            x = extractNumber(less) * 1.0 until (extractNumber(less) + 1) * 1.0 by 1.0
+            x = evalExpression(less, 0) * 1.0 until (evalExpression(less, 0) + 1) * 1.0 by 1.0
             plotList += (x -> Y(x.map(i=> evalExpression(expression, i)), pt=PointType.fullO, ps= Some(2.0), color = graphColor))
           } else {
-            x = extractNumber(less) * 1.0 until (extractNumber(less) + 1) * 1.0 by 1.0
+            x = evalExpression(less, 0) * 1.0 until (evalExpression(less, 0) + 1) * 1.0 by 1.0
             plotList += (x -> Y(x.map(i=> evalExpression(expression, i)), pt=PointType.emptyO, ps= Some(2.0), color = graphColor))
           }
           if (extractString(comp2) == "<=") {
-            x = extractNumber(more) * 1.0 until (extractNumber(more) + 1) * 1.0 by 1.0
+            x = evalExpression(more, 0) * 1.0 until (evalExpression(more, 0) + 1) * 1.0 by 1.0
             plotList += (x -> Y(x.map(i=> evalExpression(expression, i)), pt=PointType.fullO, ps= Some(2.0), color = graphColor))
           } else {
-            x = extractNumber(more) * 1.0 until (extractNumber(more) + 1) * 1.0 by 1.0
+            x = evalExpression(more, 0) * 1.0 until (evalExpression(more, 0) + 1) * 1.0 by 1.0
             plotList += (x -> Y(x.map(i=> evalExpression(expression, i)), pt=PointType.emptyO, ps= Some(2.0), color = graphColor))
           }
         case _ => return

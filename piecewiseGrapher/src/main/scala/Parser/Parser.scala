@@ -23,11 +23,11 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | "<" ^^ {case "<" => PGComparator("<")})
 
   lazy val bounds: PackratParser[Function] =
-    (number~comparator~variable~comparator~number ^^ {case l~comp1~v~comp2~m => PGBounds(l, comp1, v, comp2, m)}
-      | number~"="~variable ^^ {case n~"="~v => PGBounds(n, PGComparator("="), v, PGComparator("="), n)})
+    (expression~comparator~variable~comparator~expression ^^ {case l~comp1~v~comp2~m => PGBounds(l, comp1, v, comp2, m)}
+      | expression~"="~variable ^^ {case n~"="~v => PGBounds(n, PGComparator("="), v, PGComparator("="), n)})
 
   lazy val number: PackratParser[Function] =
-    """(-)?[0-9]\w*""".r ^^ {case x => PGNumber(x.toInt)}
+    """(-)?[0-9]\w*""".r ^^ {case x => PGNumber(x.toDouble)}
 
   lazy val expression: PackratParser[Function] =
     (expression~"+"~expression ^^ {case e~"+"~e2 => PGExpression(e, "+", e2)}
@@ -36,6 +36,12 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | expression~"/"~expression ^^ {case e~"/"~e2 => PGExpression(e, "/", e2)}
       | expression~"^"~expression ^^ {case e~"^"~n => PGExpression(e, "^", n)}
       | "("~expression~")" ^^ {case "("~e~")" => PGParens(e)}
+      | "abs("~expression~")" ^^ {case "abs("~e~")" => PGSingleApply("abs", e)}
+      | "sqrt("~expression~")" ^^ {case "sqrt("~e~")" => PGSingleApply("sqrt", e)}
+      | "sin("~expression~")" ^^ {case "sin("~e~")" => PGSingleApply("sin", e)}
+      | "cos("~expression~")" ^^ {case "cos("~e~")" => PGSingleApply("cos", e)}
+      | "pi" ^^ {case "pi" => PGNumber(3.14159)}
+      | "e" ^^ {case "e" => PGNumber(2.7172)}
       | number ^^ {case PGNumber(n) => PGNumber(n)}
       | variable ^^ {case PGVariable(v) => PGVariable(v)})
 
