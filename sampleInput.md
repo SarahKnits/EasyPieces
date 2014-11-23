@@ -34,7 +34,7 @@ Second Program
 -10 < y < 10  
 
 g(x) = { x + 2, 2 >= x    
-g(x) = { x+3, 4 > x > 2    
+g(x) = { x * x, 4 > x > 2    
 g(x) = { otherwise, x + 4  
 ```
 
@@ -42,7 +42,7 @@ g(x) = { otherwise, x + 4
 The corresponding equation in Grapher:
 
 ```
-y = x <= 2? x + 2 : (x< 4 ? x + 3 : x + 4)
+y = x <= 2? x + 2 : (x< 4 ? x * x : x + 4)
 ```
 
 This is a bit harder to follow. It again doesn't define the boundaries.
