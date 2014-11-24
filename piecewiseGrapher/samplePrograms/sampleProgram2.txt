@@ -1,5 +1,6 @@
 f(x) = { sin(x), 0 < x < 2*pi
 f(x) = { cos(x), 2*pi <= x < 4*pi
 f(x) = { 2*x, -2 < x <= 0
-h(x) = { 3, -2 < x < 4*pi
+h(x) = { -2*x, -2 < x < 4*pi
+
 
