@@ -49,9 +49,8 @@ sampleProgram.txt and sampleProgram2.txt for examples.
 
 ### Tutorial
 
-To use this program, make sure you have downloaded GNUplot. If you do not have
-GNUplot, you can download it using Homebrew. You will also need
-to download the source code for PiecewiseGrapher. 
+To use this program, make sure you have downloaded GNUplot and sbt. You will 
+also need to download the source code for PiecewiseGrapher. 
 
 Once you have downloaded the project, enter the PiecewiseGrapher directory. Type 
 
@@ -70,9 +69,9 @@ You will be presented with two options:
 [2] Grapher
 ```
 
-To run the full grapher, type 2 and hit enter. You will then be prompted to 
-type the name of the file containing the graph you want to make. Enter the name
-of your own file or use one of the included examples. These examples are
+To run the full grapher, select Grapher and hit enter. You will then be prompted
+to  type the name of the file containing the graph you want to make. Enter the 
+name of your own file or use one of the included examples. These examples are
 
 ```
 samplePrograms/sampleProgram.txt
