@@ -24,5 +24,33 @@ PiecewiseGrapher quickly produces graphs with a variety of output options.
 To use this program, make sure you have downloaded GNUplot. You will also need
 to download the source code for PiecewiseGrapher. 
 
+Once you have downloaded PiecewiseGrapher, enter the directory. Type 
 
+`` sbt compile ``
+
+If there are any errors, make sure you have downloaded all dependencies and
+that you are connected to the internet. After this has been completed, type
+
+`` sbt run ``
+
+You will be presented with two options: 
+
+`` 
+[1] GraphDemo
+[2] Grapher
+``
+
+To run the full grapher, type 2 and hit enter. You will then be prompted to 
+type the name of the file containing the graph you want to make. Enter the name
+of your own file or use one of the included examples. These examples are
+
+``
+samplePrograms/sampleProgram.txt
+samplePrograms/sampleProgram2.txt
+``
+
+The graph output will be placed in the docs/img directory and will be named
+Graph.png. 
+
+If you encounter any strange behavior, please submit an issue. 
 
