@@ -19,12 +19,38 @@ This project is designed to make piecewise graphing easy and intuitive. By
 using a syntax as close as possible to that shown in mathematics textbooks,
 PiecewiseGrapher quickly produces graphs with a variety of output options.
 
+### Program Syntax
+
+The syntax for this language is designed to closely reflect the syntax shown
+in mathematics textbooks. Each line consists of three main parts - the function
+name, the equation, and the boundary conditions. For example, the function f(x)
+with equation x^2 + 2 and bounds 0 < x < 4 would be written as 
+
+``
+f(x) = { x^2 + 2, 0 < x < 4
+``
+
+Functions can be given any name, and any variable can be used. Currently 
+supported operations are:
+* Addition
+* Subtraction
+* Multiplication
+* Division
+* Powers
+* Absolute value
+* Sine
+* Cosine
+* Square roots
+* e
+* pi
+
 ### Tutorial
 
-To use this program, make sure you have downloaded GNUplot. You will also need
+To use this program, make sure you have downloaded GNUplot. If you do not have
+GNUplot, you can download it using Homebrew. You will also need
 to download the source code for PiecewiseGrapher. 
 
-Once you have downloaded PiecewiseGrapher, enter the directory. Type 
+Once you have downloaded the project, enter the PiecewiseGrapher directory. Type 
 
 `` sbt compile ``
 
@@ -37,6 +63,7 @@ You will be presented with two options:
 
 `` 
 [1] GraphDemo
+
 [2] Grapher
 ``
 
@@ -46,6 +73,7 @@ of your own file or use one of the included examples. These examples are
 
 ``
 samplePrograms/sampleProgram.txt
+
 samplePrograms/sampleProgram2.txt
 ``
 
