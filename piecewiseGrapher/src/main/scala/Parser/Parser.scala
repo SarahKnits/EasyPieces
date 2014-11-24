@@ -27,7 +27,7 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | expression~"="~variable ^^ {case n~"="~v => PGBounds(n, PGComparator("="), v, PGComparator("="), n)})
 
   lazy val number: PackratParser[Function] =
-    """(-)?[0-9]\w*""".r ^^ {case x => PGNumber(x.toDouble)}
+    floatingPointNumber ^^ {case x => PGNumber(x.toDouble)}
 
   lazy val expression: PackratParser[Function] =
     (expression~"+"~expression ^^ {case e~"+"~e2 => PGExpression(e, "+", e2)}
@@ -44,6 +44,4 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | "e" ^^ {case "e" => PGNumber(2.7172)}
       | number ^^ {case PGNumber(n) => PGNumber(n)}
       | variable ^^ {case PGVariable(v) => PGVariable(v)})
-
 }
-
