@@ -44,6 +44,9 @@ supported operations are:
 * e
 * pi
 
+Limits must be presented in ascending order, with either < or <=. See
+sampleProgram.txt and sampleProgram2.txt for examples. 
+
 ### Tutorial
 
 To use this program, make sure you have downloaded GNUplot. If you do not have
@@ -61,21 +64,21 @@ that you are connected to the internet. After this has been completed, type
 
 You will be presented with two options: 
 
-`` 
+``` 
 [1] GraphDemo
 
 [2] Grapher
-``
+```
 
 To run the full grapher, type 2 and hit enter. You will then be prompted to 
 type the name of the file containing the graph you want to make. Enter the name
 of your own file or use one of the included examples. These examples are
 
-``
+```
 samplePrograms/sampleProgram.txt
 
 samplePrograms/sampleProgram2.txt
-``
+```
 
 The graph output will be placed in the docs/img directory and will be named
 Graph.png. 
