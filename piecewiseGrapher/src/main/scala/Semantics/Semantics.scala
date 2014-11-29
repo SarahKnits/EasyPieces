@@ -11,7 +11,7 @@ package object Semantics {
   var mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
   val step = 0.01
   var colorIndex = 0
-  val title = "My Graph"
+  val title = "Easy Pieces"
   val fileName = "Graph"
   val location = "docs/img/"
   var plotList: XYData = new XYData()
