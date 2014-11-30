@@ -1,13 +1,13 @@
-# Grapher
+# EasyPieces
 
-Information about the CS111 Grapher project by Sarah Gilkinson can be found
+Information about the CS111 EasyPieces project by Sarah Gilkinson can be found
 here.
 
 This will be kept up-to-date with implementation plan, work completed, and 
 any additional resources.
 
 The notebook recording progress on this project can be found 
-[here](https://github.com/SarahKnits/project-notebook).
+[here](https://github.com/SarahKnits/EasyPieces-notebook).
 
 See the 
 [project requirements](http://www.cs.hmc.edu/~benw/teaching/cs111_fa14/project.html) 
@@ -23,8 +23,10 @@ PiecewiseGrapher quickly produces graphs with a variety of output options.
 
 The syntax for this language is designed to closely reflect the syntax shown
 in mathematics textbooks. Each line consists of three main parts - the function
-name, the equation, and the boundary conditions. For example, the function f(x)
-with equation x^2 + 2 and bounds 0 < x < 4 would be written as 
+name, the equation, and the boundary conditions. 
+For example, the function shown here
+
+is represented as
 
 ``
 f(x) = { x^2 + 2, 0 < x < 4
