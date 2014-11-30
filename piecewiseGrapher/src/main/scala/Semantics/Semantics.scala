@@ -59,7 +59,8 @@ package object Semantics {
       case PGSingleApply("abs", left) => Math.abs(evalExpression(left, input))
       case PGSingleApply("sin", left) => Math.sin(evalExpression(left, input))
       case PGSingleApply("cos", left) => Math.cos(evalExpression(left, input))
-      case PGSingleApply("e", left) => Math.exp(evalExpression(left, input))
+      case PGSingleApply("ln", left) => Math.log(evalExpression(left, input))
+      case PGSingleApply("log", left) => Math.log10(evalExpression(left, input))
       case PGNumber(i:Double) => i
       case PGVariable(j:String) => input
       case _ => -1.0
@@ -74,7 +75,7 @@ package object Semantics {
       case Some(x) => x.foreach(f =>
       f match {
         case PGBoundsVarAndExpression(PGBounds(less, comp1, variable, comp2, more), variable2, expression) =>
-          var x: Seq[Double] = evalExpression(less, 0) until evalExpression(more, 0) by step
+          var x: Seq[Double] = evalExpression(less, 0) until (evalExpression(more, 0)+step) by step
           plotList += (x -> Y(x.map(i => evalExpression(expression, i)), ps= Some(0.5), pt = PointType.Dot, color = graphColor))
           if (extractString(comp1) == "<=") {
             x = evalExpression(less, 0) * 1.0 until (evalExpression(less, 0) + 1) * 1.0 by 1.0

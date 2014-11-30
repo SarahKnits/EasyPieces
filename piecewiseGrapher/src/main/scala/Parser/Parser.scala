@@ -40,8 +40,10 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | "sqrt("~expression~")" ^^ {case "sqrt("~e~")" => PGSingleApply("sqrt", e)}
       | "sin("~expression~")" ^^ {case "sin("~e~")" => PGSingleApply("sin", e)}
       | "cos("~expression~")" ^^ {case "cos("~e~")" => PGSingleApply("cos", e)}
-      | "pi" ^^ {case "pi" => PGNumber(3.14159)}
-      | "e" ^^ {case "e" => PGNumber(2.7172)}
+      | "ln("~expression~")" ^^ {case "ln("~e~")" => PGSingleApply("ln", e)}
+      | "log("~expression~")" ^^ {case "log("~e~")" => PGSingleApply("log", e)}
+      | "pi" ^^ {case "pi" => PGNumber(Math.PI)}
+      | "e" ^^ {case "e" => PGNumber(Math.E)}
       | number ^^ {case PGNumber(n) => PGNumber(n)}
       | variable ^^ {case PGVariable(v) => PGVariable(v)})
 }

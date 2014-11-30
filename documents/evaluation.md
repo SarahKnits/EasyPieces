@@ -35,7 +35,6 @@ were easy to figure out and which were more difficult. I found that the open
 curly brace wasn't as intuitive as I had hoped initially, but after explaining
 my reasoning behind it, fewer people struggled with it.
 
-
 ### Where did you run into trouble and why? For example, did you come up with some syntax that you found difficult to implement, given your host language choice? Did you want to support multiple features, but you had trouble getting them to play well together?
 
 One of the biggest struggles with this project was figuring out what to use as
@@ -55,6 +54,6 @@ Before the end of the project, I have the following to accomplish:
 * Correct issue with lines not showing up for horizontal lines
 * Add support for personalizing labels for axes, titles, and file names
 
-### If you worked as a pair, describe how you have divided your labor and whether that division has worked well.
-
-I have worked on all code alone, and have discussed ideas with classmates.
+At this point, I feel that the graphing ability matches my goals. My future
+work will focus on improving the user experience, making the graph output
+clearner, and fixing any bugs I find. 
