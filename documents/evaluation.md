@@ -55,7 +55,6 @@ Before the end of the project, I have the following to accomplish:
 * Correct issue with lines not showing up for horizontal lines
 * Add support for personalizing labels for axes, titles, and file names
 
-
 ### If you worked as a pair, describe how you have divided your labor and whether that division has worked well.
 
 I have worked on all code alone, and have discussed ideas with classmates.
