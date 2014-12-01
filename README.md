@@ -36,6 +36,16 @@ f(x) = { x + 3, 2 <= x < 4
 f(x) = { sin(x), 4 <= x < 10
 ```
 
+Before the functions, you can set the label for the x and y axes, the title of
+the graph, and the name of the file. This can be done as follows:
+
+```
+Filename: "Graph 1"
+Title: "Distance vs Time"
+xLabel: "Time"
+yLabel: "Distance"
+```
+
 Functions can be given any name, and any variable can be used. Currently 
 supported operations are:
 * Addition
