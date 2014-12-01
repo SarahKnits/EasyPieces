@@ -15,6 +15,6 @@ object Grapher extends App {
     }
   }
   catch {
-    case ex: Exception => println("Unable to open file.")
+    case ex: Exception => println("Unable to open file. Please verify that the file exists and try again.")
   }
 }
