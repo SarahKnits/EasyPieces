@@ -1,11 +1,12 @@
-Filename: "Test2"
+Filename: "Test3"
 Title: "Sarah Test"
 xLabel: "pie"
 yLabel: "ice cream"
+r(x) = { 3, 0 < x < 10
+s(t) = { 2t + 1 , 0 < t < 10
+t(x) = { 1, 0 < x < 1
 f(x) = { sin(x), 0 < x < 2*pi
-f(x) = { cos(x), 2*pi <= x < 4*pi
+f(x) = { cos(100*x), 2*pi <= x < 4*pi
 f(x) = { 2x, -2 < x <= 0
 h(x) = { -2*x, -2 < x < 4
 g(x) = { log(x), 0 <= x < 10
-
-
