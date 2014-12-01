@@ -26,11 +26,15 @@ in mathematics textbooks. Each line consists of three main parts - the function
 name, the equation, and the boundary conditions. 
 For example, the function shown here
 
+![Sample Graph](https://github.com/SarahKnits/EasyPieces/blob/November30/SampleGraph.png)
+
 is represented as
 
-``
-f(x) = { x^2 + 2, 0 < x < 4
-``
+```
+f(x) = { x^2, 0 < x < 2
+f(x) = { x + 3, 2 <= x < 4
+f(x) = { sin(x), 4 <= x < 10
+```
 
 Functions can be given any name, and any variable can be used. Currently 
 supported operations are:
