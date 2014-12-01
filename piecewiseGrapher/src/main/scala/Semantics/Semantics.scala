@@ -7,12 +7,13 @@ import org.sameersingh.scalaplot.Implicits._
 import org.sameersingh.scalaplot.XYSeriesImplicits.Y
 
 package object Semantics {
-  // Maps a street to a state number
   var mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
   val step = 0.01
   var colorIndex = 0
-  val title = "Easy Pieces"
-  val fileName = "Graph"
+  var title = "Easy Pieces"
+  var fileName = "Graph"
+  var xLabel = "x"
+  var yLabel = "y"
   val location = "docs/img/"
   var plotList: XYData = new XYData()
 
@@ -32,7 +33,19 @@ package object Semantics {
         case Some(x) => eval(x)
         case None => mapFunctions
       }
+    case PGData(options, function) =>
+      setOptions(options)
+      eval(function)
     case _ => mapFunctions
+  }
+
+  def setOptions(options: Function): Unit = options match {
+    case PGOptions(filename, titleName, xName, yName) =>
+      fileName = extractString(filename)
+      title = extractString(titleName)
+      xLabel = extractString(xName)
+      yLabel = extractString(yName)
+    case _ => "Invalid"
   }
 
   def extractString(function:Function): String = function match {
@@ -99,7 +112,7 @@ package object Semantics {
   def graph(functionMap: scala.collection.mutable.Map[String, List[Function]]): Unit = {
     (functionMap.keySet).foreach(i => addToPlotList(mapFunctions.get(i)))
     output(PNG(location, fileName), plot(plotList,
-      x = Axis(label = "x"), y = Axis(label = "y"), title = title))
+      x = Axis(label = xLabel), y = Axis(label = yLabel), title = title))
     mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
     plotList = new XYData()
     colorIndex = 0

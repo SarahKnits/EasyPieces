@@ -1,6 +1,11 @@
+Filename: "Test2"
+Title: "Sarah Test"
+xLabel: "pie"
+yLabel: "ice cream"
 f(x) = { sin(x), 0 < x < 2*pi
 f(x) = { cos(x), 2*pi <= x < 4*pi
-f(x) = { 2*x, -2 < x <= 0
-h(x) = { -2*x, -2 < x < 4*pi
+f(x) = { 2x, -2 < x <= 0
+h(x) = { -2*x, -2 < x < 4
+g(x) = { log(x), 0 <= x < 10
 
 
