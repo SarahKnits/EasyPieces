@@ -1,5 +1,4 @@
-import Parser.Parser
-import scala.tools.nsc.EvalLoop
+import Parser._
 
 object Grapher extends App {
   System.out.println("Enter the name of the file to graph:")
@@ -15,6 +14,7 @@ object Grapher extends App {
     }
   }
   catch {
-    case ex: Exception => println("Unable to open file. Please verify that the file exists and try again.")
+    case ex: PGException => println(ex.toString); System.exit(1)
+    case ex: Exception => println("Unable to open file. Please verify that the file exists and try again."); System.exit(2)
   }
 }

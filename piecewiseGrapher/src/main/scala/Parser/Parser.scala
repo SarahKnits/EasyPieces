@@ -5,6 +5,9 @@ import IR._
 
 object Parser extends JavaTokenParsers with PackratParsers {
 
+
+  var lineNumber = 0
+
   // Starts the parser with command
   def apply(s: String): ParseResult[AST] = parseAll(program, s)
 
@@ -12,28 +15,52 @@ object Parser extends JavaTokenParsers with PackratParsers {
     options~function ^^ {case o~f => PGData(o, f)}
 
   lazy val function: PackratParser[Function] =
-    (functionName~"("~variable~")"~"="~"{"~expression~","~bounds~function ^^ {case fn~"("~v~")"~"="~"{"~e~","~b~f => PGFunction(b,fn,v,e,Some(f))}
-      | functionName~"("~variable~")"~"="~"{"~expression~","~bounds ^^ {case fn~"("~v~")"~"="~"{"~e~","~b => PGFunction(b,fn,v,e,None)})
+    (functionName~openParens~variable~closeParens~equals~curly~expression~comma~bounds~function ^^ {case fn~op~v~cp~eq~c~e~co~b~f => PGFunction(b,fn,v,e,Some(f))}
+      | functionName~openParens~variable~closeParens~equals~curly~expression~comma~bounds ^^ {case fn~op~v~cp~eq~c~e~co~b => PGFunction(b,fn,v,e,None)})
+
+  lazy val openParens: PackratParser[Function] =
+    ("(" ^^ {case "(" => PGVariable("{")}
+      | "" ^^ {case x => throw PGException("Error: Missing ( in function line " + lineNumber)})
+
+  lazy val closeParens: PackratParser[Function] =
+    (")" ^^ {case ")" => PGVariable("{")}
+      | "" ^^ {case x => throw PGException("Error: Missing ) in function line " + lineNumber)})
+
+  lazy val equals: PackratParser[Function] =
+    ("=" ^^ {case "=" => PGVariable("{")}
+      | "" ^^ {case x => throw PGException("Error: Missing = in function line " + lineNumber)})
+
+  lazy val curly: PackratParser[Function] =
+    ("{" ^^ {case "{" => PGVariable("{")}
+      | "" ^^ {case x => throw PGException("Error: Missing { in function line " + lineNumber)})
+
+  lazy val comma: PackratParser[Function] =
+    ("," ^^ {case "," => PGVariable(",")}
+      | "" ^^ {case x => throw PGException("Error: Missing , in function line " + lineNumber)})
 
   lazy val options: PackratParser[Function] =
-    ("Filename:" ~ "\"" ~ string2 ~ "\""~options ^^ {case "Filename:" ~ "\"" ~ v ~ "\""~PGOptions(a,b,c,d) => PGOptions(v,b,c,d)}
-      | "Title:" ~ "\"" ~ string2 ~ "\"" ~ options ^^ {case "Title:" ~ "\"" ~ v ~ "\""~PGOptions(a,b,c,d) => PGOptions(a,v,c,d)}
-      | "xLabel:" ~ "\"" ~ string2 ~ "\"" ~ options ^^ {case "xLabel:" ~ "\"" ~ v ~ "\""~PGOptions(a,b,c,d) => PGOptions(a,b,v,d)}
-      | "yLabel:" ~ "\"" ~ string2 ~ "\"" ~ options ^^ {case "yLabel:" ~ "\"" ~ v ~ "\""~PGOptions(a,b,c,d) => PGOptions(a,b,c,v)}
-      | "" ^^ {case "" => PGOptions(PGVariable("GraphDemo"), PGVariable("Graph"), PGVariable("x"), PGVariable("y"))})
+    ("Filename:" ~ "\"" ~ string2 ~ "\""~options ^^ {case "Filename:" ~ "\"" ~ v ~ "\""~PGOptions(a,b,c,d,e) => PGOptions(v,b,c,d,e)}
+      | "Title:" ~ "\"" ~ string2 ~ "\"" ~ options ^^ {case "Title:" ~ "\"" ~ v ~ "\""~PGOptions(a,b,c,d,e) => PGOptions(a,v,c,d,e)}
+      | "xLabel:" ~ "\"" ~ string2 ~ "\"" ~ options ^^ {case "xLabel:" ~ "\"" ~ v ~ "\""~PGOptions(a,b,c,d,e) => PGOptions(a,b,v,d,e)}
+      | "yLabel:" ~ "\"" ~ string2 ~ "\"" ~ options ^^ {case "yLabel:" ~ "\"" ~ v ~ "\""~PGOptions(a,b,c,d,e) => PGOptions(a,b,c,v,e)}
+      | "Location:"~ "\"" ~ string2 ~ "\"" ~ options ^^ {case "Location:"~ "\""~ v ~ "\""~PGOptions(a,b,c,d,e) => PGOptions(a,b,c,d,e)}
+      | "" ^^ {case "" => PGOptions(PGVariable("GraphDemo"), PGVariable("Graph"), PGVariable("x"), PGVariable("y"), PGVariable("docs/img/"))})
 
   lazy val string2: PackratParser[Function] =
-    """[\w\s_]+""".r ^^ {case x => PGVariable(x)}
+    ("""[\w\s_]+""".r ^^ {case x => PGVariable(x)}
+      | "" ^^ {case x => throw PGException("Invalid input")})
 
   lazy val functionName: PackratParser[Function] =
-    """[A-Za-z_]\w*""".r ^^ {case x => PGFunctionName(x)}
+    ("""[A-Za-z_]\w*""".r ^^ {case x => lineNumber = lineNumber + 1; PGFunctionName(x)}
+      | """.+""".r ^^ {case x => lineNumber = lineNumber + 1; throw PGException("Error: Invalid character in function name, line " + lineNumber)})
 
   lazy val variable: PackratParser[Function] =
-    """[A-Za-z_]\w*""".r ^^ {case x => PGVariable(x)}
+    ("""[A-Za-z_]\w*""".r ^^ {case x => PGVariable(x)})
 
   lazy val comparator: PackratParser[Function] =
     ("<"~"=" ^^ {case "<"~"=" => PGComparator("<=")}
-      | "<" ^^ {case "<" => PGComparator("<")})
+      | "<" ^^ {case "<" => PGComparator("<")}
+      | "" ^^ {case x => throw PGException("Error: Invalid comparator in function line " + lineNumber)})
 
   lazy val bounds: PackratParser[Function] =
     (expression2~comparator~variable~comparator~expression2 ^^ {case l~comp1~v~comp2~m => PGBounds(l, comp1, v, comp2, m)}
@@ -59,9 +86,9 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | "pi" ^^ {case "pi" => PGNumber(Math.PI)}
       | "e" ^^ {case "e" => PGNumber(Math.E)}
       | number~variable ^^ {case n~v => PGExpression(n, "*", v)}
-      | number ^^ {case PGNumber(n) => PGNumber(n)}
-      | variable ^^ {case PGVariable(v) => PGVariable(v)}
-      | string2 ^^ {case PGVariable(x) => throw PGException("Invalid expression: ")})
+      | number ^^ {case n => n}
+      | variable ^^ {case v => v}
+      | "" ^^ {case x => throw PGException("Error: Invalid expression in function line " + lineNumber)})
 
   lazy val expression2: PackratParser[Function] =
     (expression2~"+"~expression2 ^^ {case e~"+"~e2 => PGExpression(e, "+", e2)}
@@ -78,5 +105,6 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | "log("~expression2~")" ^^ {case "log("~e~")" => PGSingleApply("log", e)}
       | "pi" ^^ {case "pi" => PGNumber(Math.PI)}
       | "e" ^^ {case "e" => PGNumber(Math.E)}
-      | number ^^ {case PGNumber(n) => PGNumber(n)})
+      | number ^^ {case n => n}
+      | "" ^^ {case x => throw PGException("Error: Invalid expression in function line " + lineNumber)})
 }

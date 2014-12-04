@@ -14,7 +14,7 @@ package object Semantics {
   var fileName = "Graph"
   var xLabel = "x"
   var yLabel = "y"
-  val location = "docs/img/"
+  var location = "docs/img/"
   var plotList: XYData = new XYData()
 
   var colorMap = Map((0, Some(Color.Black)), (1, Some(Color.Blue)), (2, Some(Color.Red)), (3, Some(Color.Magenta)),
@@ -40,11 +40,12 @@ package object Semantics {
   }
 
   def setOptions(options: Function): Unit = options match {
-    case PGOptions(filename, titleName, xName, yName) =>
+    case PGOptions(filename, titleName, xName, yName, loc) =>
       fileName = extractString(filename)
       title = extractString(titleName)
       xLabel = extractString(xName)
       yLabel = extractString(yName)
+      location = extractString(loc)
     case _ => "Invalid"
   }
 
@@ -81,11 +82,11 @@ package object Semantics {
         }
         else {
           println("Incorrect variable: " + j)
-          System.exit(-1)
+          System.exit(1)
           -1.0
         }
       case x => println("Invalid input: " + x )
-        System.exit(-1)
+        System.exit(1)
         -1.0
     }
   }
@@ -103,7 +104,7 @@ package object Semantics {
             System.exit(-1)
           }
           var variable2 = extractString(variable3)
-          val stepSize = (evalExpression(more, 0, variable2) - evalExpression(less, 0, variable2))/200
+          val stepSize = (evalExpression(more, 0, variable2) - evalExpression(less, 0, variable2))/500
           var x: Seq[Double] = (evalExpression(less, 0, variable2) until (evalExpression(more, 0, variable2)+stepSize) by stepSize)
           plotList += (x -> Y(x.map(i => evalExpression(expression, i, variable2)), ps= Some(0.1), pt = PointType.*, color = graphColor, lt=Some(LineType.Solid), style=XYPlotStyle.LinesPoints, label="f"))
           if (extractString(comp1) == "<=") {
