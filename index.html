@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Easy Pieces by SarahKnits</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="without-description">
+        <h1>Easy Pieces</h1>
+        <p></p>
+        <p class="view"><a href="https://github.com/SarahKnits/EasyPieces">View the Project on GitHub <small>SarahKnits/EasyPieces</small></a></p>
+        <ul>
+          <li><a href="https://github.com/SarahKnits/EasyPieces/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/SarahKnits/EasyPieces/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/SarahKnits/EasyPieces">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="easypieces" class="anchor" href="#easypieces" aria-hidden="true"><span class="octicon octicon-link"></span></a>EasyPieces</h1>
+
+<p>Information about the CS111 EasyPieces project by Sarah Gilkinson can be found
+here.</p>
+
+<p>This will be kept up-to-date with implementation plan, work completed, and 
+any additional resources.</p>
+
+<p>The notebook recording progress on this project can be found 
+<a href="https://github.com/SarahKnits/EasyPieces-notebook">here</a>.</p>
+
+<p>See the 
+<a href="http://www.cs.hmc.edu/%7Ebenw/teaching/cs111_fa14/project.html">project requirements</a> 
+for instructions on setting up your project.</p>
+
+<h3>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h3>
+
+<p>This project is designed to make piecewise graphing easy and intuitive. By
+using a syntax as close as possible to that shown in mathematics textbooks,
+PiecewiseGrapher quickly produces graphs with a variety of output options.</p>
+
+<h3>
+<a id="program-syntax" class="anchor" href="#program-syntax" aria-hidden="true"><span class="octicon octicon-link"></span></a>Program Syntax</h3>
+
+<p>The syntax for this language is designed to closely reflect the syntax shown
+in mathematics textbooks. Each line consists of three main parts - the function
+name, the equation, and the boundary conditions. 
+For example, the function shown here</p>
+
+<p><img src="https://github.com/SarahKnits/EasyPieces/blob/December7/SampleGraph.png" alt="Sample Graph"></p>
+
+<p>is represented as</p>
+
+<pre><code>f(x) = { x^2, 0 &lt; x &lt; 2
+f(x) = { x + 3, 2 &lt;= x &lt; 4
+f(x) = { sin(x), 4 &lt;= x &lt; 10
+</code></pre>
+
+<p>Before the functions, you can set the label for the x and y axes, the title of
+the graph, and the name of the file. This can be done as follows:</p>
+
+<pre><code>Filename: "Graph 1"
+Title: "Distance vs Time"
+xLabel: "Time"
+yLabel: "Distance"
+</code></pre>
+
+<p>Functions can be given any name, and any variable can be used. Currently 
+supported operations are:</p>
+
+<ul>
+<li>Addition</li>
+<li>Subtraction</li>
+<li>Multiplication</li>
+<li>Division</li>
+<li>Powers</li>
+<li>Absolute value</li>
+<li>Sine</li>
+<li>Cosine</li>
+<li>Square roots</li>
+<li>e</li>
+<li>pi</li>
+</ul>
+
+<p>Limits must be presented in ascending order, with either &lt; or &lt;=. See
+sampleProgram.txt and sampleProgram2.txt for examples. </p>
+
+<h3>
+<a id="tutorial" class="anchor" href="#tutorial" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial</h3>
+
+<p>To use this program, make sure you have downloaded GNUplot and sbt. You will 
+also need to download the source code for PiecewiseGrapher. </p>
+
+<p>Once you have downloaded the project, enter the PiecewiseGrapher directory. Type </p>
+
+<p><code>sbt compile</code></p>
+
+<p>If there are any errors, make sure you have downloaded all dependencies and
+that you are connected to the internet. After this has been completed, type</p>
+
+<p><code>sbt run</code></p>
+
+<p>You will be presented with two options: </p>
+
+<pre><code>[1] GraphDemo
+
+[2] Grapher
+</code></pre>
+
+<p>To run the full grapher, select Grapher and hit enter. You will then be prompted
+to  type the name of the file containing the graph you want to make. Enter the 
+name of your own file or use one of the included examples. These examples are</p>
+
+<pre><code>samplePrograms/sampleProgram.txt
+
+samplePrograms/sampleProgram2.txt
+</code></pre>
+
+<p>The graph output will be placed in the docs/img directory and will be named
+Graph.png. </p>
+
+<p>If you encounter any strange behavior, please submit an issue. </p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/SarahKnits">SarahKnits</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
