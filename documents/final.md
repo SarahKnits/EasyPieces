@@ -2,26 +2,138 @@
 
 ## Introduction: Describe your domain and motivate the need for a DSL (i.e., how could domain-experts use and benefit from a DSL?). What is the essence of your language, and why is it a good language for this domain?
 
+This project is motivated by some of my personal experiences. I was frustrated
+by the lack of an easy-to-use and complete grapher that included piece-wise
+functions with multiple parts and proper identification of <= or < conditions.
+My goal is to make a DSL that can be written in math notation and produces
+graphs that can be used by students in LaTeX homework assignments without
+low quality scans.
+
+In this case, my domain experts are early mathematics students with little
+or no experience with programming. As such, one of the major goals is to make
+the syntax as close as possible to the problem statements given in assignments
+and mathematics textbooks. 
 
 
 ## Language design details: Give a high-level overview of your language's design. Be sure to answer the following questions:
 
 * How does a user write programs in your language (e.g., do they type in commands, use a visual/graphical tool, speak, etc.)?
-* How does the syntax of your language help users write programmers more easily than the syntax of a general-purpose language?
+
+Programs in my language will be written in a text editor and executed by running
+my Easy Pieces program and entering the name of the file. Future goals 
+(beyond the scope of this project) would be creating a nice graphical
+interface to allow the user to enter their program. 
+
+* How does the syntax of your language help users write programs more easily than the syntax of a general-purpose language?
+
+The syntax of my language was designed to intentionally mirror the statement
+of problems in textbooks and assignments in a way that other languages don't.
+Following are some examples of a program written in various existing languages
+followed by the program written using the Easy Pieces DSL. 
+
+**Matlab**
+
+```
+x = 0:0.01:20;
+if (-10 < x) & (x < 10)
+    y = 2 * x
+elseif (10 <= x) & (x < 15)
+    y = 20
+elseif (15 <= x) & (x < 20)
+    y = sqrt(x)
+end
+plot(x, y)
+```
+
+**Grapher for Mac**
+
+```
+y = -10 < x ? (x < 10 ? 2 * x : (x < 15 ? 20 : (x < 20 ? sqrt(x))))
+```
+
+**Easy Pieces**   
+ 
+```
+f(x) = { 2*x, -10 < x < 10
+f(x) = { 20, 10 <= x < 15
+f(x) = { sqrt(x), 15 <= x < 20
+```
+
 * What is the basic computation that your language performs (i.e., what is the computational model)?
+
+The program takes an input of text and parses it into a list of pairs, where 
+each pair has the name of the function and a list of the bounds and equations
+for each. Each of these parts are then checked for logic and a list of data
+points is created. This list of data points is then graphed and output in the 
+form the user has specified (PNG, PDF, ASCII, or GUI).
+
 * What are the basic data structures in your DSL, if any? How does a the user create and manipulate data?
+
+My DSL can basically be seen as a list of functions. The user creates data by 
+creating a text file and passing it to the processing program. The user simply
+enters lines of text for the name of the function, the variable, the bounds,
+and the equation. 
+
 * What are the basic control structures in your DSL, if any? How does the user specify or manipulate control flow?
 * What kind(s) of input does a program in your DSL require? What kind(s) of output does a program produce?
+
+A program requires a text input of a list of functions. The program is also able
+to take in the desired window size, point interval, and which format the output
+should be given in. The output can be a PNG file, PDF, ASCII art, or a pop-up
+GUI allowing the user to change the aspect ratio before saving. Following is an
+example output corresponding to program 2 in sampleInput.md.
+
+![Program 2 Graph](https://github.com/SarahKnits/project/blob/November16/piecewiseGrapher/docs/img/SecondProgram.png)
+
 * Error handling: How can programs go wrong, and how does your language communicate those errors to the user?
+
+Programs can be wrong by having an invalid format, having math errors (such as
+division by zero), or having undefined variables in a given function. The 
+language will be able to return very useful errors for the math errors and
+undefined variables, but may have some issues returning a meaningful error
+for parsing errors. As of now, I think the best I can do is return an error
+saying that parsing failed and try to tell about where it happened. 
+
 * What tool support (e.g., error-checking, development environments) does your project provide?
+
+Since the input to my program will be a simple text file, there will not be tool
+support initially. If I create a graphical interface for input, I would add some
+error-checking in that interface. 
+
 * Are there any other DSLs for this domain? If so, what are they, and how does your language compare to these other languages?
+
+There are some existing DSLs for this domain. One of these is ScalaPlot, which
+is an internal DSL for Scala. I am using it to produce my graphs. ScalaPlot 
+requires the user to enter the programs in a typical Scala format, while my 
+language intends to make piecewise graphing easy and accessible to non-CS
+students by allowing plain-text input as close as possible to the format these
+problems are given in math textbooks. 
+
 * Example program(s): Provide one or more examples that give the casual reader a good sense of your language. Include inputs and outputs. Think of this section as “Tutorial By Example”. You might combine this section with the previous one, i.e., use examples to help describe your language.
 
 ## Language implementation: Describe your implementation. In particular, answer the following questions:
 
 * What host language did you use (i.e., in what language did you implement your DSL)? Why did you choose this host language (i.e., why is it well-suited for your language design)?
+
+I chose to host this program in Scala. Although one major influence was my 
+previous experience with parsing in Scala, I also found several good graphing
+tools using Scala libraries. I think that Scala is the best choice (or at least
+tied with other best choices) for each step from input to graphical output. 
+
 * Is yours an external or an internal DSL (or some combination thereof)? Why is that the right design?
+
+My language is an external DSL. Since I am trying to make the input as 
+human-readable as possible, I felt that an external DSL would make this easier
+as well as allowing more flexibility for the users. 
+
 * Provide an overview of the architecture of your language: front, middle, and back-end, along with any technologies used to implement these components.
+
+My system follows a very similar structure to the structure we used in the 
+external PicoBot project. The program is read in and parsed into an AST tree.
+It is then processed and made into a list of functions and equations. Next,
+this list is processed to create a list of data points. Finally, this list of
+data points is graphed and the output is created. 
+
 * “Parsing”: How does your DSL take a user program and turn it into something that can be executed? How do the data and control structures of your DSL connect to the underlying semantic model?
 * Intermediate representation: What data structure(s) in the host language do you use to represent a program in your DSL?
 * Execution: How did you implement the computational model? Describe the structure of your code and any special programming techniques you used to implement your language. In particular, how do the semantics of your host language differ from the semantics of your DSL?
@@ -31,8 +143,43 @@
 
 * How “DSL-y” is your language? How close or far away is it from a general- purpose language?
 * What works well in your language? What are you particularly pleased with?
+
+I'm pleased with the general user experience. I believe I accomplished
+my goal of creating an intuitive syntax and graphing tool that can be
+used by non-programmers. 
+
+General functionality works properly, including polynomials (powers,
+addition, subtraction, multiplication, division), parentheses, sine,
+cosine, absolute value, square roots, pi, and e. Graphing properly
+displays multiple graphs with proper coloring and limit representation
+(filled in vs open circle for boundaries). 
+
 * What could be improved? For example, how could the user's experience be better? How might your implementation be simpler or more cohesive? Are there more features you'd like to have? Does your current implementation differ from your larger vision for the language?
+
+Currently, the error checking and error messages aren't as complete as they
+should be. Future steps will be taken to improve the errors returned in 
+failed parsing. 
+
+I require the user to provide both minimum and maximum limits for each piece of 
+the graph. I have received mixed feedback about whether this or having global 
+limits with the possibility of one sided limits in the graph is better. I will
+explore the possibility of one sided limits and attempt to determine if this is
+a better option. 
+
+I am still having some issues with horizontal graphs, where occassionally the 
+line doesn't show up when the y-axis is too spread out. This can be dealt with
+by adjusting the step size, which I will be working on this coming week. 
+
 * Re-visit your evaluation plan from the beginning of the project. Which tools have you used to evaluate the quality of your design? What have you learned from these evaluations? Have you made any significant changes as a result of these tools, the critiques, or user tests?
 * Where did you run into trouble and why? For example, did you come up with some syntax that you found difficult to implement, given your host language choice? Did you want to support multiple features, but you had trouble getting them to play well together?
-* If you worked as a pair, describe how you have divided your labor and whether that division has worked well.
+
+One of the biggest struggles with this project was figuring out what to use as
+the backend for my project. I tested quite a few different graphing tools, and
+finally selected ScalaPlot for the graphing tool. ScalaPlot can do most of the 
+things I wanted from the grapher easily, but I have run into a couple of issues.
+The difficulty in choosing step size has resulted in an attempt to balance
+between having smooth graphs for functions and having all parts show up. 
+
+I have had some difficulty providing as many different colors as I wanted, as
+ScalaPlot has limited color options for graphs. 
 

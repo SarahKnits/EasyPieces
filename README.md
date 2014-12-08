@@ -77,17 +77,9 @@ that you are connected to the internet. After this has been completed, type
 
 `` sbt run ``
 
-You will be presented with two options: 
-
-``` 
-[1] GraphDemo
-
-[2] Grapher
-```
-
-To run the full grapher, select Grapher and hit enter. You will then be prompted
-to  type the name of the file containing the graph you want to make. Enter the 
-name of your own file or use one of the included examples. These examples are
+You will then be prompted to type the name of the file containing the graph you 
+want to make. Enter the name of your own file or use one of the included 
+examples. These examples are
 
 ```
 samplePrograms/sampleProgram.txt
@@ -96,7 +88,8 @@ samplePrograms/sampleProgram2.txt
 ```
 
 The graph output will be placed in the docs/img directory and will be named
-Graph.png. 
+Graph.png if the name is not specified or GivenName.png if the name is 
+specified. 
 
 If you encounter any strange behavior, please submit an issue. 
 
