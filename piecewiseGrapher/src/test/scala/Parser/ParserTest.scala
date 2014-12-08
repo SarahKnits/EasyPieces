@@ -9,7 +9,7 @@ import IR._
 
 class ParserTest extends FunSpec with LangParseMatchers[AST] {
   override val parser = Parser.apply _
-  describe("A single function") {
+  describe("A list of functions") {
 
     it("can be parsed to a single PGFunction") {
       program("f(x) = { 2*x, 0 <= x <2") should parseAs(
@@ -25,6 +25,16 @@ class ParserTest extends FunSpec with LangParseMatchers[AST] {
       program("f(x) = { 3+x, -1 < x < 2\nf(x) = { x^2, 2 <= x < 4") should parseAs(
         PGData(PGOptions(PGVariable("GraphDemo"),PGVariable("Graph"),PGVariable("x"),PGVariable("y"),PGVariable("docs/img/")),PGFunction(PGBounds(PGNumber(-1.0),PGComparator("<"),PGVariable("x"),PGComparator("<"),PGNumber(2.0)),PGFunctionName("f"),PGVariable("x"),PGExpression(PGNumber(3.0),"+",PGVariable("x")),Some(PGFunction(PGBounds(PGNumber(2.0),PGComparator("<="),PGVariable("x"),PGComparator("<"),PGNumber(4.0)),PGFunctionName("f"),PGVariable("x"),PGExpression(PGVariable("x"),"^",PGNumber(2.0)),None)))))
     }
+  }
+
+  describe("A list of functions with options") {
+
+    it("can be parsed to a single PGFunction") {
+      program("Filename: \"SarahFile\" f(x) = { 2*x, 0 <= x <2") should parseAs(
+        PGData(PGOptions(PGVariable("SarahFile"),PGVariable("Graph"),PGVariable("x"),PGVariable("y"),PGVariable("docs/img/")),PGFunction(PGBounds(PGNumber(0.0),PGComparator("<="),PGVariable("x"),PGComparator("<"),PGNumber(2.0)),PGFunctionName("f"),PGVariable("x"),PGExpression(PGNumber(2.0),"*",PGVariable("x")),None)))
+
+    }
+
   }
 }
 

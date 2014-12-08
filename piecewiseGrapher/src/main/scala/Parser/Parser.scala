@@ -5,8 +5,9 @@ import IR._
 
 object Parser extends JavaTokenParsers with PackratParsers {
 
-
   var lineNumber = 0
+
+  def reset() = lineNumber = 0
 
   // Starts the parser with command
   def apply(s: String): ParseResult[AST] = parseAll(program, s)

@@ -18,16 +18,11 @@ package object Semantics {
   var plotList: XYData = new XYData()
 
   var colorMap = Map((0, Some(Color.Black)), (1, Some(Color.Blue)), (2, Some(Color.Red)), (3, Some(Color.Magenta)),
-    (4, Some(Color.Green)), (5, Some(Color.Purple)), (6, Some(Color.Gold)))
+    (4, Some(Color.Green)), (5, Some(Color.Purple)), (6, Some(Color.Gold)), (7, Some(Color.Cyan)))
 
   def reset(): Unit = {
     mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
     colorIndex = 0
-    title = "Easy Pieces"
-    fileName = "Graph"
-    xLabel = "x"
-    yLabel = "y"
-    location = "docs/img/"
     plotList = new XYData()
   }
 
@@ -103,7 +98,7 @@ package object Semantics {
   }
 
   def addToPlotList(funcList: Option[List[Function]], functionName: String): Unit = {
-    val graphColor:Option[Color.Type] = colorMap.getOrElse(colorIndex % 7, Color.Black)
+    val graphColor:Option[Color.Type] = colorMap.getOrElse(colorIndex % colorMap.size, Color.Black)
     colorIndex += 1
     funcList match {
       case None => return
