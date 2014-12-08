@@ -20,6 +20,17 @@ package object Semantics {
   var colorMap = Map((0, Some(Color.Black)), (1, Some(Color.Blue)), (2, Some(Color.Red)), (3, Some(Color.Magenta)),
     (4, Some(Color.Green)), (5, Some(Color.Purple)), (6, Some(Color.Gold)))
 
+  def reset(): Unit = {
+    mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
+    colorIndex = 0
+    title = "Easy Pieces"
+    fileName = "Graph"
+    xLabel = "x"
+    yLabel = "y"
+    location = "docs/img/"
+    plotList = new XYData()
+  }
+
 
   def eval(ast: AST): scala.collection.mutable.Map[String, List[Function]] = ast match {
     case PGFunction(bounds, funcName, variable, expression, next) =>
