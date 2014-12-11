@@ -17,14 +17,16 @@ and mathematics textbooks.
 
 ## Language design details: Give a high-level overview of your language's design. Be sure to answer the following questions:
 
-* How does a user write programs in your language (e.g., do they type in commands, use a visual/graphical tool, speak, etc.)?
+#### How does a user write programs in your language (e.g., do they type in commands, use a visual/graphical tool, speak, etc.)?
 
 Programs in my language will be written in a text editor and executed by running
 my Easy Pieces program and entering the name of the file. Future goals 
 (beyond the scope of this project) would be creating a nice graphical
-interface to allow the user to enter their program. 
+interface to allow the user to enter their program. I have provided a guide to
+using the language in the README that has been successfully used by people
+without experience with programming. 
 
-* How does the syntax of your language help users write programs more easily than the syntax of a general-purpose language?
+#### How does the syntax of your language help users write programs more easily than the syntax of a general-purpose language?
 
 The syntax of my language was designed to intentionally mirror the statement
 of problems in textbooks and assignments in a way that other languages don't.
@@ -59,23 +61,35 @@ f(x) = { 20, 10 <= x < 15
 f(x) = { sqrt(x), 15 <= x < 20
 ```
 
-* What is the basic computation that your language performs (i.e., what is the computational model)?
+Although the Matlab program may be fairly intuitive to a more experienced
+programmer, it would have a steeper learning curve for students just starting
+out. The Grapher for Mac program, on the other hand, is fairly unintuitive
+even for someone with programming experience. In both of these cases, Easy 
+Pieces provides an advantage for the unexperience programmer, allowing a quick
+translation from problem to program without having to learn and use more
+complicated control flow. 
+
+#### What is the basic computation that your language performs (i.e., what is the computational model)?
 
 The program takes an input of text and parses it into a list of pairs, where 
 each pair has the name of the function and a list of the bounds and equations
-for each. Each of these parts are then checked for logic and a list of data
+for each. Each of these parts are then checked for correctness and a list of data
 points is created. This list of data points is then graphed and output in the 
 form the user has specified (PNG, PDF, ASCII, or GUI).
 
-* What are the basic data structures in your DSL, if any? How does a the user create and manipulate data?
+#### What are the basic data structures in your DSL, if any? How does a the user create and manipulate data?
 
 My DSL can basically be seen as a list of functions. The user creates data by 
 creating a text file and passing it to the processing program. The user simply
 enters lines of text for the name of the function, the variable, the bounds,
 and the equation. 
 
-* What are the basic control structures in your DSL, if any? How does the user specify or manipulate control flow?
-* What kind(s) of input does a program in your DSL require? What kind(s) of output does a program produce?
+#### What are the basic control structures in your DSL, if any? How does the user specify or manipulate control flow?
+
+My DSL parses and processes input linearly. There are no changes in control
+flow.
+
+#### What kind(s) of input does a program in your DSL require? What kind(s) of output does a program produce?
 
 A program requires a text input of a list of functions. The program is also able
 to take in the desired window size, point interval, and which format the output
@@ -85,22 +99,21 @@ example output corresponding to program 2 in sampleInput.md.
 
 ![Program 2 Graph](https://github.com/SarahKnits/project/blob/November16/piecewiseGrapher/docs/img/SecondProgram.png)
 
-* Error handling: How can programs go wrong, and how does your language communicate those errors to the user?
+#### Error handling: How can programs go wrong, and how does your language communicate those errors to the user?
 
 Programs can be wrong by having an invalid format, having math errors (such as
-division by zero), or having undefined variables in a given function. The 
-language will be able to return very useful errors for the math errors and
-undefined variables, but may have some issues returning a meaningful error
-for parsing errors. As of now, I think the best I can do is return an error
-saying that parsing failed and try to tell about where it happened. 
+division by zero), or having undefined variables in a given function. The
+language currently returns useful errors reporting which line a parsing error
+occurred in and what the issue was (missing open curly brace, comma, invalid
+expression, etc). 
 
-* What tool support (e.g., error-checking, development environments) does your project provide?
+#### What tool support (e.g., error-checking, development environments) does your project provide?
 
 Since the input to my program will be a simple text file, there will not be tool
 support initially. If I create a graphical interface for input, I would add some
 error-checking in that interface. 
 
-* Are there any other DSLs for this domain? If so, what are they, and how does your language compare to these other languages?
+#### Are there any other DSLs for this domain? If so, what are they, and how does your language compare to these other languages?
 
 There are some existing DSLs for this domain. One of these is ScalaPlot, which
 is an internal DSL for Scala. I am using it to produce my graphs. ScalaPlot 

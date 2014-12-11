@@ -1,14 +1,15 @@
 package IR
 
 /**
- * Intermediate representation for Piecewise Grapher
+ * Intermediate representation for Easy Pieces
  * Sarah Gilkinson
  *
- * f ∈ Function ::= fn, "(", v, ")", "=", "{" b, ",", e
+ * o ∈ Options ::= 
+ * f ∈ Function ::= o, fn, "(", v, ")", "=", "{" b, ",", e
  * b ∈ Bounds ::= v, ">", n | v, ">=", n | v, "<", n | v, "<=", n | v, "=", n |
  *                n, ">", v | n, ">=", v | n, "<", v | n, "<=", v | n, "=", v
  * fn ∈ funcName ::= String (no spaces)
- * v ∈ Variable ::= String (no Spaces)
+ * v ∈ Variable ::= String (no spaces)
  * e ∈ Expression ::= e, "+", e | e, "-", e | e, "*", e | e, "/", e | e, "^", n | n | v
  * n ∈ Number ::= [0-9]
  */

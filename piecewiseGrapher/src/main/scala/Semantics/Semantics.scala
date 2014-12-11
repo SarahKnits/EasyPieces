@@ -1,6 +1,7 @@
 package Semantics
 
 import IR._
+import Parser.PGException
 import breeze.numerics.pow
 import org.sameersingh.scalaplot._
 import org.sameersingh.scalaplot.Implicits._
@@ -73,27 +74,23 @@ package object Semantics {
       case PGExpression(left, "+", right) => evalExpression(left, input, variable) + evalExpression(right, input, variable)
       case PGExpression(left, "-", right) => evalExpression(left, input, variable) - evalExpression(right, input, variable)
       case PGExpression(left, "*", right) => evalExpression(left, input, variable) * evalExpression(right, input, variable)
-      case PGExpression(left, "/", right) => evalExpression(left, input, variable) / evalExpression(right, input, variable)
+      case PGExpression(left, "/", right) => safeDivide(evalExpression(left, input, variable), evalExpression(right, input, variable))
       case PGExpression(left, "^", right) => pow(evalExpression(left, input, variable), evalExpression(right, input, variable))
-      case PGSingleApply("sqrt", left) => pow(evalExpression(left, input, variable), 0.5)
+      case PGSingleApply("sqrt", left) => safeRoot(evalExpression(left, input, variable))
       case PGSingleApply("abs", left) => Math.abs(evalExpression(left, input, variable))
       case PGSingleApply("sin", left) => Math.sin(evalExpression(left, input, variable))
       case PGSingleApply("cos", left) => Math.cos(evalExpression(left, input, variable))
       case PGSingleApply("ln", left) => Math.log(evalExpression(left, input, variable))
       case PGSingleApply("log", left) => Math.log10(evalExpression(left, input, variable))
-      case PGNumber(i:Double) => i
-      case PGVariable(j:String) =>
-        if (j==variable) {
+      case PGNumber(i: Double) => i
+      case PGVariable(j: String) =>
+        if (j == variable) {
           input
         }
         else {
-          println("Incorrect variable: " + j)
-          System.exit(1)
-          -1.0
+          throw new PGException("Incorrect variable: " + j)
         }
-      case x => println("Invalid input: " + x )
-        System.exit(1)
-        -1.0
+      case x => throw new PGException("Invalid input: " + x)
     }
   }
 
@@ -106,8 +103,7 @@ package object Semantics {
       f match {
         case PGBoundsVarAndExpression(PGBounds(less, comp1, variable, comp2, more), variable3, expression) =>
           if (variable != variable3) {
-            println("Invalid variable: " + extractString(variable) + " in " + functionName + "(" + extractString(variable3) + ")")
-            System.exit(-1)
+            throw new PGException("Invalid variable: " + extractString(variable) + " in " + functionName + "(" + extractString(variable3) + ")")
           }
           var variable2 = extractString(variable3)
           val stepSize = (evalExpression(more, 0, variable2) - evalExpression(less, 0, variable2))/500
@@ -129,6 +125,22 @@ package object Semantics {
           }
         case _ => return
       })
+    }
+  }
+
+  def safeDivide(first:Double, second:Double): Double = {
+    if (second != 0.0) {
+      first / second
+    } else {
+      throw new PGException("Invalid operation: Division by zero")
+    }
+  }
+
+  def safeRoot(first:Double) : Double = {
+    if (!(first < 0)) {
+      Math.pow(first, 0.5)
+    } else {
+      throw new PGException("Invalid operation: Square root of a negative number.")
     }
   }
 

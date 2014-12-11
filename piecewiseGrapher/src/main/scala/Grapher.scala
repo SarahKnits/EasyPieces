@@ -1,8 +1,10 @@
 import Parser._
 
+import scala.io.StdIn
+
 object Grapher extends App {
   System.out.println("Enter the name of the file to graph:")
-  val fileName: String = Console.readLine()
+  val fileName: String = StdIn.readLine()
   try {
     val source = scala.io.Source.fromFile(fileName)
     val lines = source.mkString
@@ -14,7 +16,7 @@ object Grapher extends App {
     }
   }
   catch {
-    case ex: PGException => println(ex.toString); System.exit(1)
-    case ex: Exception => println("Unable to open file. Please verify that the file exists and try again."); System.exit(2)
+    case ex: PGException => println(Console.RED + ex.toString + Console.RESET)
+    case ex: Exception => println(Console.BLUE + "Unable to open file. Please verify that the file exists and try again." + Console.RESET)
   }
 }
