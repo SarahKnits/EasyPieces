@@ -105,7 +105,8 @@ Programs can be wrong by having an invalid format, having math errors (such as
 division by zero), or having undefined variables in a given function. The
 language currently returns useful errors reporting which line a parsing error
 occurred in and what the issue was (missing open curly brace, comma, invalid
-expression, etc). 
+expression, etc). It also reports some logical errors, such as taking the
+square root of a negative number, dividing by 0, or using the wrong variable.
 
 #### What tool support (e.g., error-checking, development environments) does your project provide?
 
@@ -122,7 +123,48 @@ language intends to make piecewise graphing easy and accessible to non-CS
 students by allowing plain-text input as close as possible to the format these
 problems are given in math textbooks. 
 
-* Example program(s): Provide one or more examples that give the casual reader a good sense of your language. Include inputs and outputs. Think of this section as “Tutorial By Example”. You might combine this section with the previous one, i.e., use examples to help describe your language.
+### Example program(s): Provide one or more examples that give the casual reader a good sense of your language. Include inputs and outputs. Think of this section as “Tutorial By Example”. You might combine this section with the previous one, i.e., use examples to help describe your language.
+
+
+**Example 1**
+```
+Title: "Distance traveled over time"
+Filename: "Problem1"
+xLabel: "Time"
+yLabel: "Distance"
+f(x) = { 2 * x, -1 < x < 3
+f(x) = { 6, 3 <= x < 4
+f(x) = { sqrt(x), 4 <= x < 10
+```
+This results in the following graph:
+
+![Example 1 Graph](https://github.com/SarahKnits/project/blob/November16/piecewiseGrapher/docs/img/Example1.png)
+
+**Example 2**
+```
+Title: "Sarah's Graph"
+Filename: "Problem2"
+xLabel: "x"
+yLabel: "y"
+f(x) = { 2, 0 < x < 2
+f(x) = { x, 2 <= x < 5
+f(x) = { sin(x), 5 <= x < 3 * π
+```
+
+This results in the following graph:
+
+![Example 2 Graph](https://github.com/SarahKnits/project/blob/November16/piecewiseGrapher/docs/img/Example2.png)
+
+**Example 3**
+```
+g(x) = { e^x, 0 < x < 1
+g(x) = { cos(x), 1 <= x < 4
+g(x) = { abs(x) -1 < x <= 0
+```
+This results in the following graph:
+
+![Example 3 Graph](https://github.com/SarahKnits/project/blob/November16/piecewiseGrapher/docs/img/Example3.png)
+
 
 ## Language implementation: Describe your implementation. In particular, answer the following questions:
 

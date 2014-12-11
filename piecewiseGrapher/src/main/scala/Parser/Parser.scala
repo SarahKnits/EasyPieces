@@ -85,6 +85,7 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | "ln("~expression~")" ^^ {case "ln("~e~")" => PGSingleApply("ln", e)}
       | "log("~expression~")" ^^ {case "log("~e~")" => PGSingleApply("log", e)}
       | "pi" ^^ {case "pi" => PGNumber(Math.PI)}
+      | "π" ^^ {case "π" => PGNumber(Math.PI)}
       | "e" ^^ {case "e" => PGNumber(Math.E)}
       | number~variable ^^ {case n~v => PGExpression(n, "*", v)}
       | number ^^ {case n => n}
@@ -104,6 +105,7 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | "cos("~expression2~")" ^^ {case "cos("~e~")" => PGSingleApply("cos", e)}
       | "ln("~expression2~")" ^^ {case "ln("~e~")" => PGSingleApply("ln", e)}
       | "log("~expression2~")" ^^ {case "log("~e~")" => PGSingleApply("log", e)}
+      | "π" ^^ {case "π" => PGNumber(Math.PI)}
       | "pi" ^^ {case "pi" => PGNumber(Math.PI)}
       | "e" ^^ {case "e" => PGNumber(Math.E)}
       | number ^^ {case n => n}

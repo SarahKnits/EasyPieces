@@ -1,0 +1,8 @@
+Title: "Problem 2"
+Filename: "Problem2"
+xLabel: "x"
+yLabel: "y"
+f(x) = { 2, 0 < x < 2
+f(x) = { x, 2 <= x < 5
+f(x) = { sin(x), 5 <= x < 3 * π
+
