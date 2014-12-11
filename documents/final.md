@@ -138,7 +138,7 @@ f(x) = { sqrt(x), 4 <= x < 10
 ```
 This results in the following graph:
 
-![Example 1 Graph](https://github.com/SarahKnits/project/blob/November16/piecewiseGrapher/docs/img/Example1.png)
+![Example 1 Graph](https://github.com/SarahKnits/EasyPieces/blob/master/supportFiles/Problem1.png)
 
 **Example 2**
 ```
@@ -153,7 +153,7 @@ f(x) = { sin(x), 5 <= x < 3 * π
 
 This results in the following graph:
 
-![Example 2 Graph](https://github.com/SarahKnits/project/blob/November16/piecewiseGrapher/docs/img/Example2.png)
+![Example 2 Graph](https://github.com/SarahKnits/EasyPieces/blob/master/supportFiles/Problem2.png)
 
 **Example 3**
 ```
@@ -163,25 +163,25 @@ g(x) = { abs(x) -1 < x <= 0
 ```
 This results in the following graph:
 
-![Example 3 Graph](https://github.com/SarahKnits/project/blob/November16/piecewiseGrapher/docs/img/Example3.png)
+![Example 3 Graph](https://github.com/SarahKnits/EasyPieces/blob/master/supportFiles/GraphDemo.png)
 
 
 ## Language implementation: Describe your implementation. In particular, answer the following questions:
 
-* What host language did you use (i.e., in what language did you implement your DSL)? Why did you choose this host language (i.e., why is it well-suited for your language design)?
+### What host language did you use (i.e., in what language did you implement your DSL)? Why did you choose this host language (i.e., why is it well-suited for your language design)?
 
 I chose to host this program in Scala. Although one major influence was my 
 previous experience with parsing in Scala, I also found several good graphing
 tools using Scala libraries. I think that Scala is the best choice (or at least
 tied with other best choices) for each step from input to graphical output. 
 
-* Is yours an external or an internal DSL (or some combination thereof)? Why is that the right design?
+### Is yours an external or an internal DSL (or some combination thereof)? Why is that the right design?
 
 My language is an external DSL. Since I am trying to make the input as 
 human-readable as possible, I felt that an external DSL would make this easier
 as well as allowing more flexibility for the users. 
 
-* Provide an overview of the architecture of your language: front, middle, and back-end, along with any technologies used to implement these components.
+### Provide an overview of the architecture of your language: front, middle, and back-end, along with any technologies used to implement these components.
 
 My system follows a very similar structure to the structure we used in the 
 external PicoBot project. The program is read in and parsed into an AST tree.
@@ -189,15 +189,15 @@ It is then processed and made into a list of functions and equations. Next,
 this list is processed to create a list of data points. Finally, this list of
 data points is graphed and the output is created. 
 
-* “Parsing”: How does your DSL take a user program and turn it into something that can be executed? How do the data and control structures of your DSL connect to the underlying semantic model?
-* Intermediate representation: What data structure(s) in the host language do you use to represent a program in your DSL?
-* Execution: How did you implement the computational model? Describe the structure of your code and any special programming techniques you used to implement your language. In particular, how do the semantics of your host language differ from the semantics of your DSL?
+### “Parsing”: How does your DSL take a user program and turn it into something that can be executed? How do the data and control structures of your DSL connect to the underlying semantic model?
+### Intermediate representation: What data structure(s) in the host language do you use to represent a program in your DSL?
+### Execution: How did you implement the computational model? Describe the structure of your code and any special programming techniques you used to implement your language. In particular, how do the semantics of your host language differ from the semantics of your DSL?
 
 
 ## Evaluation: Provide some analysis of the work you did. In particular:
 
-* How “DSL-y” is your language? How close or far away is it from a general- purpose language?
-* What works well in your language? What are you particularly pleased with?
+### How “DSL-y” is your language? How close or far away is it from a general- purpose language?
+### What works well in your language? What are you particularly pleased with?
 
 I'm pleased with the general user experience. I believe I accomplished
 my goal of creating an intuitive syntax and graphing tool that can be
@@ -209,7 +209,7 @@ cosine, absolute value, square roots, pi, and e. Graphing properly
 displays multiple graphs with proper coloring and limit representation
 (filled in vs open circle for boundaries). 
 
-* What could be improved? For example, how could the user's experience be better? How might your implementation be simpler or more cohesive? Are there more features you'd like to have? Does your current implementation differ from your larger vision for the language?
+### What could be improved? For example, how could the user's experience be better? How might your implementation be simpler or more cohesive? Are there more features you'd like to have? Does your current implementation differ from your larger vision for the language?
 
 Currently, the error checking and error messages aren't as complete as they
 should be. Future steps will be taken to improve the errors returned in 
@@ -225,8 +225,8 @@ I am still having some issues with horizontal graphs, where occassionally the
 line doesn't show up when the y-axis is too spread out. This can be dealt with
 by adjusting the step size, which I will be working on this coming week. 
 
-* Re-visit your evaluation plan from the beginning of the project. Which tools have you used to evaluate the quality of your design? What have you learned from these evaluations? Have you made any significant changes as a result of these tools, the critiques, or user tests?
-* Where did you run into trouble and why? For example, did you come up with some syntax that you found difficult to implement, given your host language choice? Did you want to support multiple features, but you had trouble getting them to play well together?
+### Re-visit your evaluation plan from the beginning of the project. Which tools have you used to evaluate the quality of your design? What have you learned from these evaluations? Have you made any significant changes as a result of these tools, the critiques, or user tests?
+### Where did you run into trouble and why? For example, did you come up with some syntax that you found difficult to implement, given your host language choice? Did you want to support multiple features, but you had trouble getting them to play well together?
 
 One of the biggest struggles with this project was figuring out what to use as
 the backend for my project. I tested quite a few different graphing tools, and
