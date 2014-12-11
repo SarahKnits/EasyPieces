@@ -1,20 +1,31 @@
 package Semantics
 
 import IR._
+import Parser.PGException
 import breeze.numerics.pow
 import org.sameersingh.scalaplot._
 import org.sameersingh.scalaplot.Implicits._
 import org.sameersingh.scalaplot.XYSeriesImplicits.Y
 
 package object Semantics {
-  // Maps a street to a state number
   var mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
   val step = 0.01
-  val graphColor = Some(Color.Black)
-  val title = "My Graph"
-  val fileName = "Graph"
-  val location = "docs/img/"
+  var colorIndex = 0
+  var title = "Easy Pieces"
+  var fileName = "Graph"
+  var xLabel = "x"
+  var yLabel = "y"
+  var location = "docs/img/"
   var plotList: XYData = new XYData()
+
+  var colorMap = Map((0, Some(Color.Black)), (1, Some(Color.Blue)), (2, Some(Color.Red)), (3, Some(Color.Magenta)),
+    (4, Some(Color.Green)), (5, Some(Color.Purple)), (6, Some(Color.Gold)), (7, Some(Color.Cyan)))
+
+  def reset(): Unit = {
+    mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
+    colorIndex = 0
+    plotList = new XYData()
+  }
 
 
   def eval(ast: AST): scala.collection.mutable.Map[String, List[Function]] = ast match {
@@ -29,7 +40,20 @@ package object Semantics {
         case Some(x) => eval(x)
         case None => mapFunctions
       }
+    case PGData(options, function) =>
+      setOptions(options)
+      eval(function)
     case _ => mapFunctions
+  }
+
+  def setOptions(options: Function): Unit = options match {
+    case PGOptions(filename, titleName, xName, yName, loc) =>
+      fileName = extractString(filename)
+      title = extractString(titleName)
+      xLabel = extractString(xName)
+      yLabel = extractString(yName)
+      location = extractString(loc)
+    case _ => "Invalid"
   }
 
   def extractString(function:Function): String = function match {
@@ -39,57 +63,93 @@ package object Semantics {
     case _ => "Invalid"
   }
 
-  def extractNumber(number:Function): Integer = number match {
+  def extractNumber(number:Function): Double = number match {
     case PGNumber(x) => x
-    case _ => -1
+    case _ => -1.0
   }
 
-  def evalExpression(expression:Function, input:Double) : Double = {
+  def evalExpression(expression:Function, input:Double, variable:String) : Double = {
     expression match {
-      case PGParens(e) => evalExpression(e, input)
-      case PGExpression(left, "+", right) => evalExpression(left, input) + evalExpression(right, input)
-      case PGExpression(left, "-", right) => evalExpression(left, input) - evalExpression(right, input)
-      case PGExpression(left, "*", right) => evalExpression(left, input) * evalExpression(right, input)
-      case PGExpression(left, "/", right) => evalExpression(left, input) / evalExpression(right, input)
-      case PGExpression(left, "^", right) => pow(evalExpression(left, input), evalExpression(right, input))
-      case PGNumber(i:Integer) => i * 1.0
-      case PGVariable(j:String) => input
-      case _ => -1.0
+      case PGParens(e) => evalExpression(e, input, variable)
+      case PGExpression(left, "+", right) => evalExpression(left, input, variable) + evalExpression(right, input, variable)
+      case PGExpression(left, "-", right) => evalExpression(left, input, variable) - evalExpression(right, input, variable)
+      case PGExpression(left, "*", right) => evalExpression(left, input, variable) * evalExpression(right, input, variable)
+      case PGExpression(left, "/", right) => safeDivide(evalExpression(left, input, variable), evalExpression(right, input, variable))
+      case PGExpression(left, "^", right) => pow(evalExpression(left, input, variable), evalExpression(right, input, variable))
+      case PGSingleApply("sqrt", left) => safeRoot(evalExpression(left, input, variable))
+      case PGSingleApply("abs", left) => Math.abs(evalExpression(left, input, variable))
+      case PGSingleApply("sin", left) => Math.sin(evalExpression(left, input, variable))
+      case PGSingleApply("cos", left) => Math.cos(evalExpression(left, input, variable))
+      case PGSingleApply("ln", left) => Math.log(evalExpression(left, input, variable))
+      case PGSingleApply("log", left) => Math.log10(evalExpression(left, input, variable))
+      case PGNumber(i: Double) => i
+      case PGVariable(j: String) =>
+        if (j == variable) {
+          input
+        }
+        else {
+          throw new PGException("Incorrect variable: " + j)
+        }
+      case x => throw new PGException("Invalid input: " + x)
     }
   }
 
-  def addToPlotList(funcList: Option[List[Function]]): Unit = {
+  def addToPlotList(funcList: Option[List[Function]], functionName: String): Unit = {
+    val graphColor:Option[Color.Type] = colorMap.getOrElse(colorIndex % colorMap.size, Color.Black)
+    colorIndex += 1
     funcList match {
       case None => return
       case Some(x) => x.foreach(f =>
       f match {
-        case PGBoundsVarAndExpression(PGBounds(less, comp1, variable, comp2, more), variable2, expression) =>
-          var x: Seq[Double] = extractNumber(less) * 1.0 until extractNumber(more) * 1.0 by step
-          plotList += (x -> Y(x.map(i => evalExpression(expression, i)), pt = PointType.Dot, color = graphColor))
+        case PGBoundsVarAndExpression(PGBounds(less, comp1, variable, comp2, more), variable3, expression) =>
+          if (variable != variable3) {
+            throw new PGException("Invalid variable: " + extractString(variable) + " in " + functionName + "(" + extractString(variable3) + ")")
+          }
+          var variable2 = extractString(variable3)
+          val stepSize = (evalExpression(more, 0, variable2) - evalExpression(less, 0, variable2))/500
+          var x: Seq[Double] = (evalExpression(less, 0, variable2) until (evalExpression(more, 0, variable2)+stepSize) by stepSize)
+          plotList += (x -> Y(x.map(i => evalExpression(expression, i, variable2)), ps= Some(0.1), pt = PointType.*, color = graphColor, lt=Some(LineType.Solid), style=XYPlotStyle.LinesPoints, label="f"))
           if (extractString(comp1) == "<=") {
-            x = extractNumber(less) * 1.0 until (extractNumber(less) + 1) * 1.0 by 1.0
-            plotList += (x -> Y(x.map(i=> evalExpression(expression, i)), pt=PointType.fullO, ps= Some(2.0), color = graphColor))
+            x = evalExpression(less, 0, variable2) * 1.0 until (evalExpression(less, 0, variable2) + 1) * 1.0 by 1.0
+            plotList += (x -> Y(x.map(i=> evalExpression(expression, i, variable2)), pt=PointType.fullO, ps= Some(2.0), color = graphColor))
           } else {
-            x = extractNumber(less) * 1.0 until (extractNumber(less) + 1) * 1.0 by 1.0
-            plotList += (x -> Y(x.map(i=> evalExpression(expression, i)), pt=PointType.emptyO, ps= Some(2.0), color = graphColor))
+            x = evalExpression(less, 0, variable2) * 1.0 until (evalExpression(less, 0, variable2) + 1) * 1.0 by 1.0
+            plotList += (x -> Y(x.map(i=> evalExpression(expression, i, variable2)), pt=PointType.emptyO, ps= Some(2.0), color = graphColor))
           }
           if (extractString(comp2) == "<=") {
-            x = extractNumber(more) * 1.0 until (extractNumber(more) + 1) * 1.0 by 1.0
-            plotList += (x -> Y(x.map(i=> evalExpression(expression, i)), pt=PointType.fullO, ps= Some(2.0), color = graphColor))
+            x = evalExpression(more, 0, variable2) * 1.0 until (evalExpression(more, 0, variable2) + 1) * 1.0 by 1.0
+            plotList += (x -> Y(x.map(i=> evalExpression(expression, i, variable2)), pt=PointType.fullO, ps= Some(2.0), color = graphColor))
           } else {
-            x = extractNumber(more) * 1.0 until (extractNumber(more) + 1) * 1.0 by 1.0
-            plotList += (x -> Y(x.map(i=> evalExpression(expression, i)), pt=PointType.emptyO, ps= Some(2.0), color = graphColor))
+            x = evalExpression(more, 0, variable2) * 1.0 until (evalExpression(more, 0, variable2) + 1) * 1.0 by 1.0
+            plotList += (x -> Y(x.map(i=> evalExpression(expression, i, variable2)), pt=PointType.emptyO, ps= Some(2.0), color = graphColor))
           }
         case _ => return
       })
     }
   }
 
+  def safeDivide(first:Double, second:Double): Double = {
+    if (second != 0.0) {
+      first / second
+    } else {
+      throw new PGException("Invalid operation: Division by zero")
+    }
+  }
+
+  def safeRoot(first:Double) : Double = {
+    if (!(first < 0)) {
+      Math.pow(first, 0.5)
+    } else {
+      throw new PGException("Invalid operation: Square root of a negative number.")
+    }
+  }
+
   def graph(functionMap: scala.collection.mutable.Map[String, List[Function]]): Unit = {
-    (functionMap.keySet).foreach(i => addToPlotList(mapFunctions.get(i)))
+    (functionMap.keySet).foreach(i => addToPlotList(mapFunctions.get(i), i))
     output(PNG(location, fileName), plot(plotList,
-      x = Axis(label = "x"), y = Axis(label = "f(x)"), title = title))
+      x = Axis(label = xLabel), y = Axis(label = yLabel), title = title))
     mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
     plotList = new XYData()
+    colorIndex = 0
   }
 }

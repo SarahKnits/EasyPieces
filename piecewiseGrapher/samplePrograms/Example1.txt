@@ -1,0 +1,7 @@
+Title: "Distance traveled over time"
+Filename: "Problem1"
+xLabel: "Time"
+yLabel: "Distance"
+f(x) = { 2 * x, -1 < x < 3
+f(x) = { 6, 3 <= x < 4
+f(x) = { sqrt(x), 4 <= x < 10

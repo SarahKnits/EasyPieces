@@ -13,7 +13,8 @@ libraryDependencies ++=
 libraryDependencies  ++= Seq(
   "org.scalanlp" %% "breeze" % "0.10",
   "org.scalanlp" %% "breeze-natives" % "0.10",
-  "org.sameersingh.scalaplot" % "scalaplot" % "0.0.3"
+  "org.sameersingh.scalaplot" % "scalaplot" % "0.0.3",
+  "org.scala-lang" % "scala-swing" % "2.9.2"
 )
 
 resolvers ++= Seq(
