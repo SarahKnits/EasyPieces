@@ -146,7 +146,7 @@ This results in the following graph:
 
 **Example 2**
 ```
-Title: "Sarah's Graph"
+Title: "Problem 2"
 Filename: "Problem2"
 xLabel: "x"
 yLabel: "y"
@@ -163,7 +163,7 @@ This results in the following graph:
 ```
 g(x) = { e^x, 0 < x < 1
 g(x) = { cos(x), 1 <= x < 4
-g(x) = { abs(x) -1 < x <= 0
+g(x) = { abs(x), -1 < x <= 0
 ```
 This results in the following graph:
 
