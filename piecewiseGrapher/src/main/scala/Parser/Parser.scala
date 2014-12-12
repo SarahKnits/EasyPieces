@@ -39,16 +39,21 @@ object Parser extends JavaTokenParsers with PackratParsers {
     ("," ^^ {case "," => PGVariable(",")}
       | "" ^^ {case x => throw PGException("Error: Missing , in function line " + lineNumber)})
 
+  lazy val quote: PackratParser[Function] =
+    ("\"" ^^ {case "\"" => PGVariable("\"")}
+    | "" ^^ {case x => throw PGException("Error: Missing \"")})
+
   lazy val options: PackratParser[Function] =
-    ("Filename:" ~ "\"" ~ string2 ~ "\""~options ^^ {case "Filename:" ~ "\"" ~ v ~ "\""~PGOptions(a,b,c,d,e) => PGOptions(v,b,c,d,e)}
-      | "Title:" ~ "\"" ~ string2 ~ "\"" ~ options ^^ {case "Title:" ~ "\"" ~ v ~ "\""~PGOptions(a,b,c,d,e) => PGOptions(a,v,c,d,e)}
-      | "xLabel:" ~ "\"" ~ string2 ~ "\"" ~ options ^^ {case "xLabel:" ~ "\"" ~ v ~ "\""~PGOptions(a,b,c,d,e) => PGOptions(a,b,v,d,e)}
-      | "yLabel:" ~ "\"" ~ string2 ~ "\"" ~ options ^^ {case "yLabel:" ~ "\"" ~ v ~ "\""~PGOptions(a,b,c,d,e) => PGOptions(a,b,c,v,e)}
-      | "Location:"~ "\"" ~ string2 ~ "\"" ~ options ^^ {case "Location:"~ "\""~ v ~ "\""~PGOptions(a,b,c,d,e) => PGOptions(a,b,c,d,e)}
-      | "" ^^ {case "" => PGOptions(PGVariable("GraphDemo"), PGVariable("Graph"), PGVariable("x"), PGVariable("y"), PGVariable("docs/img/"))})
+    ("Filename:" ~ quote ~ string2 ~ quote ~options ^^ {case "Filename:" ~ q1 ~ v ~ q2 ~PGOptions(a,b,c,d,e,f) => PGOptions(v,b,c,d,e,f)}
+      | "Title:" ~ quote ~ string2 ~ quote ~ options ^^ {case "Title:" ~ q1 ~ v ~ q2 ~PGOptions(a,b,c,d,e,f) => PGOptions(a,v,c,d,e,f)}
+      | "xLabel:" ~ quote ~ string2 ~ quote ~ options ^^ {case "xLabel:" ~ q1 ~ v ~ q2 ~PGOptions(a,b,c,d,e,f) => PGOptions(a,b,v,d,e,f)}
+      | "yLabel:" ~ quote ~ string2 ~ quote ~ options ^^ {case "yLabel:" ~ q1 ~ v ~ q2 ~PGOptions(a,b,c,d,e,f) => PGOptions(a,b,c,v,e,f)}
+      | "Location:"~ quote ~ string2 ~ quote ~ options ^^ {case "Location:"~ q1 ~ v ~ q2 ~PGOptions(a,b,c,d,e,f) => PGOptions(a,b,c,d,v,f)}
+      | "Format:"~ quote ~ string2 ~ quote ~ options ^^ {case "Format:"~ q1 ~ v ~ q2 ~PGOptions(a,b,c,d,e,f) => PGOptions(a,b,c,d,e,v)}
+      | "" ^^ {case "" => PGOptions(PGVariable("GraphDemo"), PGVariable("Graph"), PGVariable("x"), PGVariable("y"), PGVariable("docs/img/"), PGVariable("PNG"))})
 
   lazy val string2: PackratParser[Function] =
-    ("""[\w\s_]+""".r ^^ {case x => PGVariable(x)}
+    ("""[\w\s_/]*""".r ^^ {case x => PGVariable(x)}
       | "" ^^ {case x => throw PGException("Invalid input")})
 
   lazy val functionName: PackratParser[Function] =
@@ -69,7 +74,9 @@ object Parser extends JavaTokenParsers with PackratParsers {
 
   lazy val number: PackratParser[Function] =
     (floatingPointNumber ^^ {case x => PGNumber(x.toDouble)}
-      | "pi" ^^ {case "pi" => PGNumber(Math.PI)})
+      | "pi" ^^ {case "pi" => PGNumber(Math.PI)}
+      | "π" ^^ {case "π" => PGNumber(Math.PI)}
+      | "e" ^^ {case "e" => PGNumber(Math.E)})
 
   lazy val expression: PackratParser[Function] =
     (expression~"+"~expression ^^ {case e~"+"~e2 => PGExpression(e, "+", e2)}
@@ -84,9 +91,6 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | "cos("~expression~")" ^^ {case "cos("~e~")" => PGSingleApply("cos", e)}
       | "ln("~expression~")" ^^ {case "ln("~e~")" => PGSingleApply("ln", e)}
       | "log("~expression~")" ^^ {case "log("~e~")" => PGSingleApply("log", e)}
-      | "pi" ^^ {case "pi" => PGNumber(Math.PI)}
-      | "π" ^^ {case "π" => PGNumber(Math.PI)}
-      | "e" ^^ {case "e" => PGNumber(Math.E)}
       | number~variable ^^ {case n~v => PGExpression(n, "*", v)}
       | number ^^ {case n => n}
       | variable ^^ {case v => v}
@@ -105,9 +109,6 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | "cos("~expression2~")" ^^ {case "cos("~e~")" => PGSingleApply("cos", e)}
       | "ln("~expression2~")" ^^ {case "ln("~e~")" => PGSingleApply("ln", e)}
       | "log("~expression2~")" ^^ {case "log("~e~")" => PGSingleApply("log", e)}
-      | "π" ^^ {case "π" => PGNumber(Math.PI)}
-      | "pi" ^^ {case "pi" => PGNumber(Math.PI)}
-      | "e" ^^ {case "e" => PGNumber(Math.E)}
       | number ^^ {case n => n}
       | "" ^^ {case x => throw PGException("Error: Invalid expression in function line " + lineNumber)})
 }

@@ -9,13 +9,17 @@ import org.sameersingh.scalaplot.XYSeriesImplicits.Y
 
 package object Semantics {
   var mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
-  val step = 0.01
   var colorIndex = 0
   var title = "Easy Pieces"
   var fileName = "Graph"
   var xLabel = "x"
   var yLabel = "y"
   var location = "docs/img/"
+  var format = "PNG"
+  var xMin = Double.MaxValue
+  var xMax = Double.MinValue
+  var yMin = Double.MaxValue
+  var yMax = Double.MinValue
   var plotList: XYData = new XYData()
 
   var colorMap = Map((0, Some(Color.Black)), (1, Some(Color.Blue)), (2, Some(Color.Red)), (3, Some(Color.Magenta)),
@@ -47,13 +51,15 @@ package object Semantics {
   }
 
   def setOptions(options: Function): Unit = options match {
-    case PGOptions(filename, titleName, xName, yName, loc) =>
+    case PGOptions(filename, titleName, xName, yName, loc, form) =>
       fileName = extractString(filename)
       title = extractString(titleName)
       xLabel = extractString(xName)
       yLabel = extractString(yName)
       location = extractString(loc)
-    case _ => "Invalid"
+      format = extractString(form)
+      if (!(format == "PNG" || format == "GUI" || format == "ASCII" || format == "SVG" || format == "PDF")) format = "PNG"
+    case _ => // Do nothing
   }
 
   def extractString(function:Function): String = function match {
@@ -66,6 +72,13 @@ package object Semantics {
   def extractNumber(number:Function): Double = number match {
     case PGNumber(x) => x
     case _ => -1.0
+  }
+
+  def updateLimits(expression:Function, input:Double, variable:String) : Double = {
+    val value = evalExpression(expression, input, variable)
+    if (value < yMin) yMin = value
+    if (value > yMax) yMax = value
+    value
   }
 
   def evalExpression(expression:Function, input:Double, variable:String) : Double = {
@@ -81,7 +94,7 @@ package object Semantics {
       case PGSingleApply("sin", left) => Math.sin(evalExpression(left, input, variable))
       case PGSingleApply("cos", left) => Math.cos(evalExpression(left, input, variable))
       case PGSingleApply("ln", left) => Math.log(evalExpression(left, input, variable))
-      case PGSingleApply("log", left) => Math.log10(evalExpression(left, input, variable))
+      case PGSingleApply("log", left) => safeLog(evalExpression(left, input, variable))
       case PGNumber(i: Double) => i
       case PGVariable(j: String) =>
         if (j == variable) {
@@ -106,9 +119,11 @@ package object Semantics {
             throw new PGException("Invalid variable: " + extractString(variable) + " in " + functionName + "(" + extractString(variable3) + ")")
           }
           var variable2 = extractString(variable3)
+          if (evalExpression(less, 0, variable2) < xMin) xMin = evalExpression(less, 0, variable2)
+          if (evalExpression(more, 0, variable2) > xMax) xMax = evalExpression(more, 0, variable2)
           val stepSize = (evalExpression(more, 0, variable2) - evalExpression(less, 0, variable2))/500
           var x: Seq[Double] = (evalExpression(less, 0, variable2) until (evalExpression(more, 0, variable2)+stepSize) by stepSize)
-          plotList += (x -> Y(x.map(i => evalExpression(expression, i, variable2)), ps= Some(0.1), pt = PointType.*, color = graphColor, lt=Some(LineType.Solid), style=XYPlotStyle.LinesPoints, label="f"))
+          plotList += (x -> Y(x.map(i => updateLimits(expression, i, variable2)), ps= Some(0.1), pt = PointType.*, color = graphColor, lt=Some(LineType.Solid), style=XYPlotStyle.LinesPoints, label="f"))
           if (extractString(comp1) == "<=") {
             x = evalExpression(less, 0, variable2) * 1.0 until (evalExpression(less, 0, variable2) + 1) * 1.0 by 1.0
             plotList += (x -> Y(x.map(i=> evalExpression(expression, i, variable2)), pt=PointType.fullO, ps= Some(2.0), color = graphColor))
@@ -136,6 +151,14 @@ package object Semantics {
     }
   }
 
+  def safeLog(value:Double): Double = {
+    if (value <= 0.0) {
+      -2.0
+    } else {
+      Math.log10(value)
+    }
+  }
+
   def safeRoot(first:Double) : Double = {
     if (!(first < 0)) {
       Math.pow(first, 0.5)
@@ -146,8 +169,26 @@ package object Semantics {
 
   def graph(functionMap: scala.collection.mutable.Map[String, List[Function]]): Unit = {
     (functionMap.keySet).foreach(i => addToPlotList(mapFunctions.get(i), i))
-    output(PNG(location, fileName), plot(plotList,
-      x = Axis(label = xLabel), y = Axis(label = yLabel), title = title))
+    val xRange = Some(xMin - ((xMax - xMin)/10.0), xMax + ((xMax - xMin)/10.0))
+    val yRange = Some(yMin - ((yMax - yMin)/10.0), yMax + ((yMax - yMin)/10.0))
+    format match {
+      case "PNG" =>
+        output(PNG(location, fileName), plot(plotList,
+          x = Axis(label = xLabel, range = xRange), y = Axis(label = yLabel, range = yRange), title = title))
+      case "PDF" =>
+        output(PDF(location, fileName), plot(plotList,
+          x = Axis(label = xLabel, range = xRange), y = Axis(label = yLabel, range = yRange), title = title))
+      case "ASCII" =>
+        System.out.println(
+        output(ASCII, plot(plotList,
+          x = Axis(label = xLabel, range = xRange), y = Axis(label = yLabel, range = yRange), title = title)))
+      case "SVG" =>
+        output(SVG, plot(plotList,
+          x = Axis(label = xLabel, range = xRange), y = Axis(label = yLabel, range = yRange), title = title))
+      case "GUI" =>
+        output(GUI, plot(plotList,
+          x = Axis(label = xLabel, range = xRange), y = Axis(label = yLabel, range = yRange), title = title))
+    }
     mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
     plotList = new XYData()
     colorIndex = 0
