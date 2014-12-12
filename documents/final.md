@@ -127,7 +127,7 @@ language intends to make piecewise graphing easy and accessible to non-CS
 students by allowing plain-text input as close as possible to the format these
 problems are given in math textbooks. 
 
-### Example program(s): Provide one or more examples that give the casual reader a good sense of your language. Include inputs and outputs. Think of this section as “Tutorial By Example”. You might combine this section with the previous one, i.e., use examples to help describe your language.
+#### Example program(s): Provide one or more examples that give the casual reader a good sense of your language. Include inputs and outputs. Think of this section as “Tutorial By Example”. You might combine this section with the previous one, i.e., use examples to help describe your language.
 
 
 **Example 1**
@@ -210,6 +210,10 @@ expressions and limits. This is then processed and graphed.
 
 #### Execution: How did you implement the computational model? Describe the structure of your code and any special programming techniques you used to implement your language. In particular, how do the semantics of your host language differ from the semantics of your DSL?
 
+To implement the computational model, I used the standard structure of parsing
+the input to an intermediate format followed by a semantic interpretation of the
+data resulting in the output of a graph. Since I am implementing an entirely
+external language, the input is only related to the output by meaning. 
 
 ## Evaluation: Provide some analysis of the work you did. In particular:
 
@@ -249,7 +253,7 @@ message to correct code with errors in it.
 I successfully graphed functions both from tutorials online and from past
 assignments. 
 
-### Where did you run into trouble and why? For example, did you come up with some syntax that you found difficult to implement, given your host language choice? Did you want to support multiple features, but you had trouble getting them to play well together?
+#### Where did you run into trouble and why? For example, did you come up with some syntax that you found difficult to implement, given your host language choice? Did you want to support multiple features, but you had trouble getting them to play well together?
 
 One of the biggest struggles with this project was figuring out what to use as
 the backend for my project. I tested quite a few different graphing tools, and
