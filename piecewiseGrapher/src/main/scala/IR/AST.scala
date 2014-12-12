@@ -28,5 +28,5 @@ case class PGNumber(int:Double) extends Function
 case class PGParens(expression:Function) extends Function
 case class PGSingleApply(method:String, expression:Function) extends Function
 case class PGComparator(comp:String) extends Function
-case class PGOptions(filename:Function, title:Function, xLabel:Function, yLabel:Function, location:Function) extends Function
+case class PGOptions(filename:Function, title:Function, xLabel:Function, yLabel:Function, location:Function, format:Function) extends Function
 case class PGData(options:Function, function:Function) extends Function

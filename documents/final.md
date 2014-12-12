@@ -14,7 +14,6 @@ or no experience with programming. As such, one of the major goals is to make
 the syntax as close as possible to the problem statements given in assignments
 and mathematics textbooks. 
 
-
 ## Language design details: Give a high-level overview of your language's design. Be sure to answer the following questions:
 
 #### How does a user write programs in your language (e.g., do they type in commands, use a visual/graphical tool, speak, etc.)?
@@ -73,9 +72,9 @@ complicated control flow.
 
 The program takes an input of text and parses it into a list of pairs, where 
 each pair has the name of the function and a list of the bounds and equations
-for each. Each of these parts are then checked for correctness and a list of data
-points is created. This list of data points is then graphed and output in the 
-form the user has specified (PNG, PDF, ASCII, or GUI).
+for each. Each of these parts are then checked for correctness and a list of 
+data points is created. This list of data points is then graphed and output in 
+the form the user has specified (PNG, PDF, ASCII, or GUI).
 
 #### What are the basic data structures in your DSL, if any? How does a the user create and manipulate data?
 
@@ -97,7 +96,7 @@ should be given in. The output can be a PNG file, PDF, ASCII art, or a pop-up
 GUI allowing the user to change the aspect ratio before saving. Following is an
 example output corresponding to program 2 in sampleInput.md.
 
-![Program 2 Graph](https://github.com/SarahKnits/project/blob/November16/piecewiseGrapher/docs/img/SecondProgram.png)
+![Program 2 Graph](https://github.com/SarahKnits/project/blob/master/piecewiseGrapher/docs/img/SecondProgram.png)
 
 #### Error handling: How can programs go wrong, and how does your language communicate those errors to the user?
 
@@ -107,6 +106,11 @@ language currently returns useful errors reporting which line a parsing error
 occurred in and what the issue was (missing open curly brace, comma, invalid
 expression, etc). It also reports some logical errors, such as taking the
 square root of a negative number, dividing by 0, or using the wrong variable.
+
+Although I had initially considered checking that the limits of a single
+function never overlapped, my critique partner mentioned that this wouldn't be
+particularly helpful in most cases and may limit some use cases. As such, I 
+decided against checking that there was one and only one y value for each x.
 
 #### What tool support (e.g., error-checking, development environments) does your project provide?
 
@@ -138,11 +142,11 @@ f(x) = { sqrt(x), 4 <= x < 10
 ```
 This results in the following graph:
 
-![Example 1 Graph](https://github.com/SarahKnits/project/blob/November16/piecewiseGrapher/docs/img/Example1.png)
+![Example 1 Graph](https://github.com/SarahKnits/EasyPieces/blob/master/supportFiles/Problem1.png)
 
 **Example 2**
 ```
-Title: "Sarah's Graph"
+Title: "Problem 2"
 Filename: "Problem2"
 xLabel: "x"
 yLabel: "y"
@@ -153,35 +157,37 @@ f(x) = { sin(x), 5 <= x < 3 * π
 
 This results in the following graph:
 
-![Example 2 Graph](https://github.com/SarahKnits/project/blob/November16/piecewiseGrapher/docs/img/Example2.png)
+![Example 2 Graph](https://github.com/SarahKnits/EasyPieces/blob/master/supportFiles/Problem2.png)
 
 **Example 3**
 ```
 g(x) = { e^x, 0 < x < 1
 g(x) = { cos(x), 1 <= x < 4
-g(x) = { abs(x) -1 < x <= 0
+g(x) = { abs(x), -1 < x <= 0
 ```
 This results in the following graph:
 
-![Example 3 Graph](https://github.com/SarahKnits/project/blob/November16/piecewiseGrapher/docs/img/Example3.png)
+![Example 3 Graph](https://github.com/SarahKnits/EasyPieces/blob/master/supportFiles/GraphDemo.png)
+
+For a more complete tutorial in learning the language, please see the README.
 
 
 ## Language implementation: Describe your implementation. In particular, answer the following questions:
 
-* What host language did you use (i.e., in what language did you implement your DSL)? Why did you choose this host language (i.e., why is it well-suited for your language design)?
+#### What host language did you use (i.e., in what language did you implement your DSL)? Why did you choose this host language (i.e., why is it well-suited for your language design)?
 
 I chose to host this program in Scala. Although one major influence was my 
 previous experience with parsing in Scala, I also found several good graphing
 tools using Scala libraries. I think that Scala is the best choice (or at least
 tied with other best choices) for each step from input to graphical output. 
 
-* Is yours an external or an internal DSL (or some combination thereof)? Why is that the right design?
+#### Is yours an external or an internal DSL (or some combination thereof)? Why is that the right design?
 
 My language is an external DSL. Since I am trying to make the input as 
 human-readable as possible, I felt that an external DSL would make this easier
 as well as allowing more flexibility for the users. 
 
-* Provide an overview of the architecture of your language: front, middle, and back-end, along with any technologies used to implement these components.
+#### Provide an overview of the architecture of your language: front, middle, and back-end, along with any technologies used to implement these components.
 
 My system follows a very similar structure to the structure we used in the 
 external PicoBot project. The program is read in and parsed into an AST tree.
@@ -189,15 +195,31 @@ It is then processed and made into a list of functions and equations. Next,
 this list is processed to create a list of data points. Finally, this list of
 data points is graphed and the output is created. 
 
-* “Parsing”: How does your DSL take a user program and turn it into something that can be executed? How do the data and control structures of your DSL connect to the underlying semantic model?
-* Intermediate representation: What data structure(s) in the host language do you use to represent a program in your DSL?
-* Execution: How did you implement the computational model? Describe the structure of your code and any special programming techniques you used to implement your language. In particular, how do the semantics of your host language differ from the semantics of your DSL?
+#### “Parsing”: How does your DSL take a user program and turn it into something that can be executed? How do the data and control structures of your DSL connect to the underlying semantic model?
+
+In writing an external DSL, I uses the JavaTokenParser with PackratParsers. The
+language has a fairly strict format that is required, with meaninful error
+messages returned when the format is incorrect. 
+
+#### Intermediate representation: What data structure(s) in the host language do you use to represent a program in your DSL?
+
+A program in my DSL initially consists of a list of functions. After these
+functions have been parsed, they are converted to a list of pairs, where the
+first value is the name of the function and the second value is the list of 
+expressions and limits. This is then processed and graphed. 
+
+#### Execution: How did you implement the computational model? Describe the structure of your code and any special programming techniques you used to implement your language. In particular, how do the semantics of your host language differ from the semantics of your DSL?
 
 
 ## Evaluation: Provide some analysis of the work you did. In particular:
 
-* How “DSL-y” is your language? How close or far away is it from a general- purpose language?
-* What works well in your language? What are you particularly pleased with?
+#### How “DSL-y” is your language? How close or far away is it from a general- purpose language?
+
+My language is extremely "DSL-y." You are only able to produce graphs of 
+piecewise or continuous functions. As such, it is very far away from a general-
+purpose language. 
+
+#### What works well in your language? What are you particularly pleased with?
 
 I'm pleased with the general user experience. I believe I accomplished
 my goal of creating an intuitive syntax and graphing tool that can be
@@ -209,11 +231,7 @@ cosine, absolute value, square roots, pi, and e. Graphing properly
 displays multiple graphs with proper coloring and limit representation
 (filled in vs open circle for boundaries). 
 
-* What could be improved? For example, how could the user's experience be better? How might your implementation be simpler or more cohesive? Are there more features you'd like to have? Does your current implementation differ from your larger vision for the language?
-
-Currently, the error checking and error messages aren't as complete as they
-should be. Future steps will be taken to improve the errors returned in 
-failed parsing. 
+#### What could be improved? For example, how could the user's experience be better? How might your implementation be simpler or more cohesive? Are there more features you'd like to have? Does your current implementation differ from your larger vision for the language?
 
 I require the user to provide both minimum and maximum limits for each piece of 
 the graph. I have received mixed feedback about whether this or having global 
@@ -221,12 +239,17 @@ limits with the possibility of one sided limits in the graph is better. I will
 explore the possibility of one sided limits and attempt to determine if this is
 a better option. 
 
-I am still having some issues with horizontal graphs, where occassionally the 
-line doesn't show up when the y-axis is too spread out. This can be dealt with
-by adjusting the step size, which I will be working on this coming week. 
+#### Re-visit your evaluation plan from the beginning of the project. Which tools have you used to evaluate the quality of your design? What have you learned from these evaluations? Have you made any significant changes as a result of these tools, the critiques, or user tests?
 
-* Re-visit your evaluation plan from the beginning of the project. Which tools have you used to evaluate the quality of your design? What have you learned from these evaluations? Have you made any significant changes as a result of these tools, the critiques, or user tests?
-* Where did you run into trouble and why? For example, did you come up with some syntax that you found difficult to implement, given your host language choice? Did you want to support multiple features, but you had trouble getting them to play well together?
+I tested my style goals using user tests with inexperienced programmers (mostly
+my family). I found that they were able to follow the README tutorial well and
+produce correct code. I also found that they were able to use the returned error
+message to correct code with errors in it. 
+
+I successfully graphed functions both from tutorials online and from past
+assignments. 
+
+### Where did you run into trouble and why? For example, did you come up with some syntax that you found difficult to implement, given your host language choice? Did you want to support multiple features, but you had trouble getting them to play well together?
 
 One of the biggest struggles with this project was figuring out what to use as
 the backend for my project. I tested quite a few different graphing tools, and
