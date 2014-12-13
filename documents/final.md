@@ -67,7 +67,7 @@ Although the Matlab program may be fairly intuitive to a more experienced
 programmer, it would have a steeper learning curve for students just starting
 out. The Grapher for Mac program, on the other hand, is fairly unintuitive
 even for someone with programming experience. In both of these cases, Easy 
-Pieces provides an advantage for the unexperience programmer, allowing a quick
+Pieces provides an advantage for the inexperienced programmer, allowing a quick
 translation from problem to program without having to learn and use more
 complicated control flow. 
 
@@ -98,7 +98,13 @@ to take in the name of the output file, the title of the graph, the label for
 both axes, and the format in which the output
 should be given. The output can be a PNG file, PDF, ASCII art, or a pop-up
 GUI allowing the user to change the aspect ratio before saving. Following is an
-example output corresponding to program 2 in sampleInput.md.
+example input text file and the output graph.
+
+```
+g(x) = { x + 2, -10 < x < 2    
+g(x) = { x * x, 2 <= x < 4  
+g(x) = { x + 4, 4 <= x < 10 
+```
 
 ![Program 2 Graph](https://github.com/SarahKnits/project/blob/master/piecewiseGrapher/docs/img/SecondProgram.png)
 
@@ -122,8 +128,10 @@ Since the input to my program will be a simple text file, there will not be tool
 support initially. If I create a graphical interface for input, I would add some
 error-checking in that interface. 
 
-When the Easy Pieces program is run with the file as input, error-checking
-occurs. 
+When the Easy Pieces program is run with the file as input, the file reading
+has error-checking, as does the parsing, evaluation, and graphing. I tested
+my error-checking on my inexperienced users, and found that they were able to
+use those errors to correct the broken code.
 
 #### Are there any other DSLs for this domain? If so, what are they, and how does your language compare to these other languages?
 
@@ -208,8 +216,9 @@ data points is graphed and the output is created.
 
 #### “Parsing”: How does your DSL take a user program and turn it into something that can be executed? How do the data and control structures of your DSL connect to the underlying semantic model?
 
-In writing an external DSL, I uses the JavaTokenParser with PackratParsers. The
-language has a fairly strict format that is required, with meaninful error
+In writing an external DSL, I uses the JavaTokenParser with PackratParsers. 
+The file is read in based on the path provided by the user at runtime. The
+language has a fairly strict format that is required, with meaningful error
 messages returned when the format is incorrect. The individual function lines
 are parsed and used in the list of functions to graph. The first few characters 
 in each line (the name of the function and the variable used) are used to
@@ -232,13 +241,18 @@ the input to an intermediate format followed by a semantic interpretation of the
 data resulting in the output of a graph. Since I am implementing an entirely
 external language, the input is only related to the output by meaning. 
 
+I based the portion of the interpreter that evaluated the function at each 
+point on the calculator DSL we wrote earlier in the semester. I included
+polynomials, periodic functions, and other helpful operations in addition
+to having error-checking for the correct variable, valid operations, and 
+proper syntax. 
+
 ## Evaluation: Provide some analysis of the work you did. In particular:
 
-#### How “DSL-y” is your language? How close or far away is it from a general- purpose language?
+#### How “DSL-y” is your language? How close or far away is it from a general-purpose language?
 
 My language is extremely "DSL-y." You are only able to produce graphs of 
-piecewise or continuous functions. As such, it is very far away from a general-
-purpose language. 
+piecewise or continuous functions. As such, it is very far away from a general-purpose language. 
 
 #### What works well in your language? What are you particularly pleased with?
 
