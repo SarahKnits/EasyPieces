@@ -5,8 +5,10 @@ import IR._
 
 object Parser extends JavaTokenParsers with PackratParsers {
 
+  // Global variable, used for error messages
   var lineNumber = 0
 
+  // Resets global variable, used for testing
   def reset() = lineNumber = 0
 
   // Starts the parser with command
