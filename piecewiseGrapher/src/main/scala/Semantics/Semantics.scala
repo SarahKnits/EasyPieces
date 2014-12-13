@@ -153,6 +153,7 @@ package object Semantics {
           var x: Seq[Double] = evalExpression(less, 0, variable2) until (evalExpression(more, 0, variable2)+stepSize) by stepSize
           // Adds main plot to point list
           plotList += (x -> Y(x.map(i => updateLimits(expression, i, variable2)), ps= Some(0.1), pt = PointType.*, color = graphColor, lt=Some(LineType.Solid), style=XYPlotStyle.LinesPoints, label="f"))
+
           // Produces first boundary point (open or closed)
           if (extractString(comp1) == "<=") {
             x = evalExpression(less, 0, variable2) * 1.0 until (evalExpression(less, 0, variable2) + 1) * 1.0 by 1.0
@@ -161,6 +162,7 @@ package object Semantics {
             x = evalExpression(less, 0, variable2) * 1.0 until (evalExpression(less, 0, variable2) + 1) * 1.0 by 1.0
             plotList += (x -> Y(x.map(i=> evalExpression(expression, i, variable2)), pt=PointType.emptyO, ps= Some(2.0), color = graphColor))
           }
+
           // Produces second boundary point (open or closed)
           if (extractString(comp2) == "<=") {
             x = evalExpression(more, 0, variable2) * 1.0 until (evalExpression(more, 0, variable2) + 1) * 1.0 by 1.0
@@ -226,9 +228,11 @@ package object Semantics {
    * Produces the graph
    */
   def graph(functionMap: scala.collection.mutable.Map[String, List[Function]]): Unit = {
-    (functionMap.keySet).foreach(i => addToPlotList(mapFunctions.get(i), i))
+    functionMap.keySet.foreach(i => addToPlotList(mapFunctions.get(i), i))
+
     val xRange = Some(xMin - ((xMax - xMin)/10.0), xMax + ((xMax - xMin)/10.0))
     val yRange = Some(yMin - ((yMax - yMin)/10.0), yMax + ((yMax - yMin)/10.0))
+
     format match {
       case "PNG" =>
         output(PNG(location, fileName), plot(plotList,
@@ -247,6 +251,7 @@ package object Semantics {
         output(GUI, plot(plotList,
           x = Axis(label = xLabel, range = xRange), y = Axis(label = yLabel, range = yRange), title = title))
     }
+
     mapFunctions = scala.collection.mutable.Map[String, List[Function]]()
     plotList = new XYData()
     colorIndex = 0
