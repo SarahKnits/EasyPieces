@@ -101,12 +101,15 @@ GUI allowing the user to change the aspect ratio before saving. Following is an
 example input text file and the output graph.
 
 ```
+Title: "Second Program"
+xLabel: "x"
+yLabel: "f(x)"
 g(x) = { x + 2, -10 < x < 2    
 g(x) = { x * x, 2 <= x < 4  
 g(x) = { x + 4, 4 <= x < 10 
 ```
 
-![Program 2 Graph](https://github.com/SarahKnits/project/blob/master/piecewiseGrapher/docs/img/SecondProgram.png)
+![Program 2 Graph](https://github.com/SarahKnits/project/blob/December12/piecewiseGrapher/docs/img/SecondProgram.png)
 
 #### Error handling: How can programs go wrong, and how does your language communicate those errors to the user?
 
