@@ -102,8 +102,8 @@ example input text file and the output graph.
 
 ```
 Title: "Second Program"
-xLabel: "x"
-yLabel: "f(x)"
+xLabel: "Time"
+yLabel: "Distance"
 g(x) = { x + 2, -10 < x < 2    
 g(x) = { x * x, 2 <= x < 4  
 g(x) = { x + 4, 4 <= x < 10 
