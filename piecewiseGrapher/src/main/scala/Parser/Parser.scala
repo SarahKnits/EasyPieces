@@ -81,22 +81,32 @@ object Parser extends JavaTokenParsers with PackratParsers {
       | "e" ^^ {case "e" => PGNumber(Math.E)})
 
   lazy val expression: PackratParser[Function] =
-    (expression~"+"~expression ^^ {case e~"+"~e2 => PGExpression(e, "+", e2)}
-      | expression~"-"~expression ^^ {case e~"-"~e2 => PGExpression(e, "-", e2)}
-      | expression~"*"~expression ^^ {case e~"*"~e2 => PGExpression(e, "*", e2)}
-      | expression~"/"~expression ^^ {case e~"/"~e2 => PGExpression(e, "/", e2)}
-      | expression~"^"~expression ^^ {case e~"^"~n => PGExpression(e, "^", n)}
-      | "("~expression~")" ^^ {case "("~e~")" => PGParens(e)}
-      | "abs("~expression~")" ^^ {case "abs("~e~")" => PGSingleApply("abs", e)}
+    ( addSub ^^ {case e => e}
+      | "" ^^ {case x => throw PGException("Error: Invalid expression in function line " + lineNumber)})
+
+  lazy val addSub: PackratParser[Function] =
+    (addSub~"+"~addSub ^^ {case e~"+"~e2 => PGExpression(e, "+", e2)}
+      | addSub~"-"~addSub ^^ {case e~"-"~e2 => PGExpression(e, "-", e2)}
+      | mulDiv ^^ {case m => m})
+
+  lazy val mulDiv: PackratParser[Function] =
+    (mulDiv~"*"~mulDiv ^^ {case e~"*"~e2 => PGExpression(e, "*", e2)}
+      | mulDiv~"/"~mulDiv ^^ {case e~"/"~e2 => PGExpression(e, "/", e2)}
+      | singleApp ^^ {case a => a})
+
+  lazy val singleApp: PackratParser[Function] =
+    ( "abs("~expression~")" ^^ {case "abs("~e~")" => PGSingleApply("abs", e)}
       | "sqrt("~expression~")" ^^ {case "sqrt("~e~")" => PGSingleApply("sqrt", e)}
       | "sin("~expression~")" ^^ {case "sin("~e~")" => PGSingleApply("sin", e)}
       | "cos("~expression~")" ^^ {case "cos("~e~")" => PGSingleApply("cos", e)}
       | "ln("~expression~")" ^^ {case "ln("~e~")" => PGSingleApply("ln", e)}
       | "log("~expression~")" ^^ {case "log("~e~")" => PGSingleApply("log", e)}
+      | "("~expression~")" ^^ {case "("~e~")" => e}
+      | singleApp~"^"~singleApp ^^ {case e~"^"~n => PGExpression(e, "^", n)}
       | number~variable ^^ {case n~v => PGExpression(n, "*", v)}
       | number ^^ {case n => n}
-      | variable ^^ {case v => v}
-      | "" ^^ {case x => throw PGException("Error: Invalid expression in function line " + lineNumber)})
+      | variable ^^ {case v => v})
+
 
   lazy val expression2: PackratParser[Function] =
     (expression2~"+"~expression2 ^^ {case e~"+"~e2 => PGExpression(e, "+", e2)}
